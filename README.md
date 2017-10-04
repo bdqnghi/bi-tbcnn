@@ -1,4 +1,4 @@
-# Tree-based Convolutional Neural Networks
+# Siamese Neural Network based on Tree-based Convolutional Neural Networks (TBCNN)
 
 Implementation of the Siamese-TBCNN on top of TBCNN, which is the following paper:
 
@@ -7,8 +7,7 @@ Implementation of the Siamese-TBCNN on top of TBCNN, which is the following pape
 Differences from the paper
 --------------------------
 
-* There is no "coding layer" in this implementation (works fine without it).
-* Since I found it difficult to understand the pretrained Vectors are learned by a variation of word2vec instead of the proposed method.
+* Since I found it difficult to understand the original paper to learn the pretrained vector, the pretrained vectors are learned by a variation of word2vec instead of the proposed method.
 * Adam Optimizer is used instead of gradient descent.
 
 First time setup
@@ -25,6 +24,10 @@ by the AST parser are written in Python 2.
 Simply run this command to train the network, the data to train is in data/algorithm_trees.pkl, the pretrained_vectors is in data/pretrained_vectors:
 
     $ python train.py
+    
+After training, we can test the model easily by running:
+
+    $ python test.py
     
 Example output
 --------------
@@ -78,7 +81,6 @@ and argorithms.
 
 To do list
 ----------------
-
 
 * Building the siamese neural network (SNN), each side of the SNN is a TBCNN. The propose model : https://github.com/bdqnghi/siamese-tbcnn/blob/master/propose_model.png
 ![Propose model for the siamese tbcnn](propose_model.png)
