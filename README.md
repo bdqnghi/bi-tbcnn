@@ -13,7 +13,7 @@ Differences from the paper
 
 Current state
 ----------------
-* Reimplemented the the TBCNN paper
+* Reimplemented the TBCNN paper
 
 To do list
 ----------------
