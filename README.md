@@ -19,7 +19,9 @@ Current state
 To do list
 ----------------
 
-* Building the first version of siamese neural network (SNN), each side of the SNN is a TBCNN. The propose model : https://github.com/bdqnghi/siamese-tbcnn/blob/master/propose_model.png
+* Building the first version of siamese neural network (SNN), each side of the SNN is a TBCNN, input of each side is the AST presentation of code in different languages. 
+
+Illustration of the propose model : 
 ![Propose model for the siamese tbcnn](propose_model.png)
 
 
