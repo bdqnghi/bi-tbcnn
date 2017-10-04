@@ -61,3 +61,15 @@ def test_model(logdir, infile, embedfile):
     print('Accuracy:', accuracy_score(correct_labels, predictions))
     print(classification_report(correct_labels, predictions, target_names=target_names))
     print(confusion_matrix(correct_labels, predictions))
+
+
+
+def main():
+    logdir = "./logs/1"
+    inputs = "./data/algorithm_trees.pkl"
+    embeddings = "./data/pretrained_vectors.pkl"
+    test_model(logdir,inputs,embeddings) 
+
+
+if __name__ == "__main__":
+    main()
