@@ -1,6 +1,6 @@
 # Tree-based Convolutional Neural Networks
 
-TBCNN implemented in TensorFlow based on the following paper:
+Implementation of the Siamese-TBCNN on top of TBCNN, which is the following paper:
 
 ["Convolutional Neural Networks over Tree Structures for Programming Language Processing" Lili Mou, et al.](https://arxiv.org/pdf/1409.5718.pdf)
 
@@ -10,20 +10,6 @@ Differences from the paper
 * There is no "coding layer" in this implementation (works fine without it).
 * Since I found it difficult to understand the pretrained Vectors are learned by a variation of word2vec instead of the proposed method.
 * Adam Optimizer is used instead of gradient descent.
-
-Usage notes
------------
-
-While every attempt has been made to make this model memory efficient, it is
-capable of accepting arbitrary-sized trees. Especially large trees can consume
-many gigabytes of memory, so it is suggested you work with only small trees.
-You can filter out large trees in the sampling step with the --maxsize flag.
-Depending on your machine's setup you can grow or shrink this number. The model
-can run fairly well (albeit slower) on a CPU with RAM if memory is a problem.
-
-The vectorizer has best results with large amounts of data. The sample data 
-source provided is fairly small. It is possible to train the vectorizer on
-a larger datasource, and then apply it to a smaller classification problem.
 
 First time setup
 ----------------
