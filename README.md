@@ -1,11 +1,5 @@
 # Siamese Neural Network based on Tree-based Convolutional Neural Networks (TBCNN)
 
-To do list
-----------------
-
-* Building the siamese neural network (SNN), each side of the SNN is a TBCNN. The propose model : https://github.com/bdqnghi/siamese-tbcnn/blob/master/propose_model.png
-![Propose model for the siamese tbcnn](propose_model.png | width=100)
-
 Implementation of the Siamese-TBCNN on top of TBCNN, which is the following paper:
 
 ["Convolutional Neural Networks over Tree Structures for Programming Language Processing" Lili Mou, et al.](https://arxiv.org/pdf/1409.5718.pdf)
@@ -15,6 +9,18 @@ Differences from the paper
 
 * Since I found it difficult to understand the original paper to learn the pretrained vector, the pretrained vectors are learned by a variation of word2vec instead of the proposed method.
 * Adam Optimizer is used instead of gradient descent.
+
+
+Current state
+----------------
+* Reimplemented the the TBCNN paper
+
+To do list
+----------------
+
+* Building the siamese neural network (SNN), each side of the SNN is a TBCNN. The propose model : https://github.com/bdqnghi/siamese-tbcnn/blob/master/propose_model.png
+![Propose model for the siamese tbcnn](propose_model.png | width=100)
+
 
 First time setup
 ----------------
@@ -83,5 +89,7 @@ and argorithms.
      [  0   0   0 128   0   0]
      [  0   0   0   0 109   0]
      [  0   0   0   6   0 138]]
+
+
 
 
