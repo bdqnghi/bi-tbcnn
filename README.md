@@ -19,7 +19,7 @@ To do list
 ----------------
 
 * Building the siamese neural network (SNN), each side of the SNN is a TBCNN. The propose model : https://github.com/bdqnghi/siamese-tbcnn/blob/master/propose_model.png
-![Propose model for the siamese tbcnn](propose_model.png | width=100)
+![Propose model for the siamese tbcnn](propose_model.png)
 
 
 First time setup
