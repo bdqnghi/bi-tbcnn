@@ -46,7 +46,7 @@ Example output
 --------------
 
 The classification task was to classify 6 different kinds of data structures
-and argorithms.
+and argorithms. The original dataset is divided 7/3 for training/testing
 
 ### After training
 
