@@ -1,6 +1,6 @@
 # Tree-based Convolutional Neural Networks
 
-Efficient TBCNN implemented in TensorFlow based on the following paper:
+TBCNN implemented in TensorFlow based on the following paper:
 
 ["Convolutional Neural Networks over Tree Structures for Programming Language Processing" Lili Mou, et al.](https://arxiv.org/pdf/1409.5718.pdf)
 
@@ -8,13 +8,8 @@ Differences from the paper
 --------------------------
 
 * There is no "coding layer" in this implementation (works fine without it).
-* Vectors are learned by a variation of word2vec instead of the proposed method.
-* Adam is used instead of gradient descent.
-
-Usage
-=====
-
-Recommended process is to setup a Python Virtual environment.
+* Since I found it difficult to understand the pretrained Vectors are learned by a variation of word2vec instead of the proposed method.
+* Adam Optimizer is used instead of gradient descent.
 
 Usage notes
 -----------
@@ -93,3 +88,10 @@ and argorithms.
      [  0   0   0 128   0   0]
      [  0   0   0   0 109   0]
      [  0   0   0   6   0 138]]
+
+
+To do list
+----------------
+
+
+* Building the siamese neural network (SNN), each side of the SNN is a TBCNN
