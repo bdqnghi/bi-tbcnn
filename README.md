@@ -1,6 +1,6 @@
 # Siamese Neural Network based on Tree-based Convolutional Neural Networks (TBCNN)
 
-Implementation of the Siamese-TBCNN on top of TBCNN, which is the following paper:
+Tensorflow Implementation of the Siamese-TBCNN on top of TBCNN, which is the following paper:
 
 ["Convolutional Neural Networks over Tree Structures for Programming Language Processing" Lili Mou, et al.](https://arxiv.org/pdf/1409.5718.pdf)
 
