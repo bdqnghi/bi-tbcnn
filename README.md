@@ -7,14 +7,14 @@ Implementation of the Siamese-TBCNN on top of TBCNN, which is the following pape
 Differences from the paper
 --------------------------
 
-* Since I found it difficult to implement the original paper to learn the pretrained vector, the pretrained vectors are learned by a variation of word2vec instead of the proposed method. The code is in this repo: https://github.com/bdqnghi/ast-node-encoding
+* Since I found it difficult to implement the original paper to learn the pretrained vector (https://arxiv.org/abs/1409.3358) , the pretrained vectors are learned by a variation of word2vec instead of the proposed method. The code is in this repo: https://github.com/bdqnghi/ast-node-encoding
 * Adam Optimizer is used instead of gradient descent.
 
 
 Current state
 ----------------
 * Reimplemented the TBCNN paper
-* The dataset used in this implementation is smaller than in the original paper (9000 programs, 6 classess compare to 52000 programs, 104 classes in the original paper). I crawled Python programs from Github by myself since using the built-in Python AST parser for Python code is more convenient and less time-consuming than writing the AST Parser for the C++ code in the original dataset, thus the node type is a little bit different.
+* The dataset used in this implementation is smaller than in the original paper (9000 programs, 6 classess compare to 52000 programs, 104 classes in the original paper). I crawled Python programs from Github by myself since using the built-in Python AST parser for Python code is more convenient and less time-consuming than writing the AST Parser for the C++ code from the original dataset, thus the node type is a little bit different.
 
 To do list
 ----------------
