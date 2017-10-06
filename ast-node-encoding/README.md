@@ -21,6 +21,8 @@ End-to-end instruction to train AST vectors:
   ```
   {'tree': <_ast.Module object at 0x7f84c52f9210>, 'metadata': {'label': 'mergesort'}}
   ```
+ Note that this is not the format we're going to use to train the TBCNN, this step is just to store data for some archive purpose instead of reloading the heavy raw data all the time.
+ 
  
 * Go to ast-node-encoding/scripts, execute:
     
