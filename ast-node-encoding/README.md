@@ -12,16 +12,16 @@ https://github.com/bdqnghi/siamese-tbcnn/blob/master/data/vectors.txt
 End-to-end instruction to train AST vectors:
 ----------------
 * Extract raw.7z in the data directory. This zip file contain the raw training data for this project. After extracting, we can see that there is 6 sub-directories for 6 algorithms. Under each sub-directory, there will be raw Python code crawled from Github API.
-* Go to ast-node-encoding/scripts, execute:
+* Go to ```ast-node-encoding/scripts```, execute:
     
     ```python
     python parse_raw_data_to_pickle.py
     ```
-    This step is to convert the raw data to pickle file, which can be found in data/algorithms.pkl. The pickle is nothing but just a list of ast trees with label, an example tree in the list is like:
+    This step is to convert the raw data to pickle file, which can be found in ```data/algorithms.pkl```. The pickle is nothing but just a list of ast trees with label, an example tree in the list is like:
   ```
   {'tree': <_ast.Module object at 0x7f84c52f9210>, 'metadata': {'label': 'mergesort'}}
   ```
-    **Note that this is not the format we're going to use to train the TBCNN, this step is just to store data for some archive purpose instead of reloading the heavy raw data all the time.The format we'll use to train the TBCNN is in data/algorithm_trees.pkl**
+    **Note that this is not the format we're going to use to train the TBCNN, this step is just to store data for some archive purpose instead of reloading the heavy raw data all the time.The format we'll use to train the TBCNN is in ```data/algorithm_trees.pkl```**
  
  
 * Go to ast-node-encoding/scripts, execute:
@@ -36,15 +36,19 @@ End-to-end instruction to train AST vectors:
   
   {'node': 'arguments', 'children': ['Name'], 'parent': 'FunctionDef'}
   ```
-  After executing the script, we can find the pickle to store all the nodes in data/algorithm_nodes.pkl
+  After executing the script, we can find the pickle to store all the nodes in ```data/algorithm_nodes.pkl```.
 
-* Once we get the ```algorithm_nodes.pkl```, go to ast-node-encoding execute:
+* Once we get the ```algorithm_nodes.pkl```, go to ```ast-node-encoding``` and execute:
 
   ```python
     python train.py
     ```
   The main() function in this file will open the ```algorithm_nodes.pkl``` and output the pickle ```pretrained_vectors.pkl``` into the data directory.
   
+In short, the steps are: 
+```
+convert raw data to algorithms.pkl --> convert algorithms.pkl to algorithm_nodes.pkl --> use the algorithm_nodes.pkl to train and output pretrained_vectors.pkl
+```
 A visualization of learned token
 --------------------------
 ![](../figure/ast_nodes_visualization.png)
