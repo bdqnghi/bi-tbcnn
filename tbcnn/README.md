@@ -45,7 +45,7 @@ The raw data is in data/raw.7z, feels free to extract to examine. The data I use
 ```
 The above tree will be corresponding to a file in the raw training set. Execute this file [dataset_sample](https://github.com/bdqnghi/siamese-tbcnn/blob/master/tbcnn/scripts/test_pickle.py) for more details.
 
-Train the test the model
+Train and test the model
 ----------------
 
 Simply run this command to train the network, the data to train is in data/algorithm_trees.pkl, the pretrained_vectors is in data/pretrained_vectors:
