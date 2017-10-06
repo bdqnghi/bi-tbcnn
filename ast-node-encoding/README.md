@@ -17,11 +17,11 @@ End-to-end instruction to train AST vectors:
     ```python
     python parse_raw_data_to_pickle.py
     ```
-  This step is to convert the raw data to pickle file, which can be found in data/algorithms.pkl. The pickle is nothing but just a list of ast trees with label, an example tree in the list is like:
+    This step is to convert the raw data to pickle file, which can be found in data/algorithms.pkl. The pickle is nothing but just a list of ast trees with label, an example tree in the list is like:
   ```
   {'tree': <_ast.Module object at 0x7f84c52f9210>, 'metadata': {'label': 'mergesort'}}
   ```
- Note that this is not the format we're going to use to train the TBCNN, this step is just to store data for some archive purpose instead of reloading the heavy raw data all the time.
+    Note that this is not the format we're going to use to train the TBCNN, this step is just to store data for some archive purpose instead of reloading the heavy raw data all the time.
  
  
 * Go to ast-node-encoding/scripts, execute:
