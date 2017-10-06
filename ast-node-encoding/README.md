@@ -29,7 +29,7 @@ End-to-end instruction to train AST vectors:
     ```python
     python parse_pickle_file_to_nodes.py
     ```
-  This step is to convert the ast trees in pickle file a list of nodes, each node will have the following format:
+  This step is to convert the ast trees in pickle file into a list of nodes, each node will have the following format:
   
   ```
   {'node': 'Module', 'children': ['FunctionDef', 'FunctionDef', 'FunctionDef', 'Print'], 'parent': None}
