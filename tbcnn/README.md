@@ -7,7 +7,7 @@ Tensorflow Implementation of the Siamese-TBCNN on top of TBCNN, which is the fol
 Differences from the paper
 --------------------------
 
-* Since I found it difficult to implement the original paper to learn the pretrained vector (https://arxiv.org/abs/1409.3358) , the pretrained vectors are learned by a variation of word2vec instead of the proposed method. The code is in this repo: https://github.com/bdqnghi/ast-node-encoding
+* Since I found it difficult to implement the original paper to learn the pretrained vector (https://arxiv.org/abs/1409.3358) , the pretrained vectors are learned by a variation of word2vec instead of the proposed method. 
 * Adam Optimizer is used instead of gradient descent.
 
 
@@ -22,7 +22,7 @@ To do list
 * Building the first version of siamese neural network (SNN), each side of the SNN is a TBCNN, input of each side is the AST presentation of code in different languages. 
 
 Illustration of the propose model : 
-![Propose model for the siamese tbcnn](figure/propose_model.png)
+![Propose model for the siamese tbcnn](../figure/propose_model.png)
 
 
 First time setup
@@ -35,6 +35,18 @@ This will install neccessary requirements to run this project.
 
 The recommended Python version is 2 because many of the scripts parsed
 by the AST parser are written in Python 2.
+
+
+Dataset details
+----------------
+The raw data is in data/raw.7z, feels free to extract to examine. The data I used to train the model is in data/algorithm_trees.pkl, which is nothing but just the list of AST trees from the raw data. A sample of a tree will be sth like:
+```
+{'tree': {'node': 'Module', 'children': [{'node': 'FunctionDef', 'children': [{'node': 'arguments', 'children': [{'node': 'Name', 'children': [{'node': 'Param', 'children': []}]}]}, {'node': 'If', 'children': [{'node': 'Compare', 'children': [{'node': 'Call', 'children': [{'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}]}, {'node': 'LtE', 'children': []}, {'node': 'Num', 'children': []}]}, {'node': 'Return', 'children': [{'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}]}]}, {'node': 'Assign', 'children': [{'node': 'Name', 'children': [{'node': 'Store', 'children': []}]}, {'node': 'Subscript', 'children': [{'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'Index', 'children': [{'node': 'BinOp', 'children': [{'node': 'Call', 'children': [{'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}]}, {'node': 'Div', 'children': []}, {'node': 'Num', 'children': []}]}]}, {'node': 'Load', 'children': []}]}]}, {'node': 'Assign', 'children': [{'node': 'Name', 'children': [{'node': 'Store', 'children': []}]}, {'node': 'ListComp', 'children': [{'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'comprehension', 'children': [{'node': 'Name', 'children': [{'node': 'Store', 'children': []}]}, {'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'Compare', 'children': [{'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'Lt', 'children': []}, {'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}]}]}]}]}, {'node': 'Assign', 'children': [{'node': 'Name', 'children': [{'node': 'Store', 'children': []}]}, {'node': 'ListComp', 'children': [{'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'comprehension', 'children': [{'node': 'Name', 'children': [{'node': 'Store', 'children': []}]}, {'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'Compare', 'children': [{'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'Eq', 'children': []}, {'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}]}]}]}]}, {'node': 'Assign', 'children': [{'node': 'Name', 'children': [{'node': 'Store', 'children': []}]}, {'node': 'ListComp', 'children': [{'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'comprehension', 'children': [{'node': 'Name', 'children': [{'node': 'Store', 'children': []}]}, {'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'Compare', 'children': [{'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'Gt', 'children': []}, {'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}]}]}]}]}, {'node': 'Return', 'children': [{'node': 'BinOp', 'children': [{'node': 'BinOp', 'children': [{'node': 'Call', 'children': [{'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}]}, {'node': 'Add', 'children': []}, {'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}]}, {'node': 'Add', 'children': []}, {'node': 'Call', 'children': [{'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}, {'node': 'Name', 'children': [{'node': 'Load', 'children': []}]}]}]}]}]}]}, 'label': 'quicksort'}
+```
+The above tree will be corresponding to a file in the raw training set. Execute this file [dataset_sample](https://github.com/bdqnghi/siamese-tbcnn/blob/master/tbcnn/scripts/test_pickle.py) for more details.
+
+Train the test the model
+----------------
 
 Simply run this command to train the network, the data to train is in data/algorithm_trees.pkl, the pretrained_vectors is in data/pretrained_vectors:
 
