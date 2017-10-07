@@ -14,7 +14,7 @@ Differences from the paper
 Current state
 ----------------
 * Reimplemented the TBCNN paper
-* The dataset used in this implementation is smaller than in the original paper (9000 programs, 6 classess compare to 52000 programs, 104 classes in the original paper). I crawled Python programs from Github by myself since using the built-in Python AST parser for Python code is more convenient and less time-consuming than writing the AST Parser for the C++ code from the original dataset, thus the node type is a little bit different.
+* The dataset used in this implementation is smaller than in the original paper (3000 programs, 6 classess compare to 52000 programs, 104 classes in the original paper). I crawled Python programs from Github by myself since using the built-in Python AST parser for Python code is more convenient and less time-consuming than writing the AST Parser for the C++ code from the original dataset, thus the node type is a little bit different.
 
 To do list
 ----------------
