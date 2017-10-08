@@ -65,7 +65,7 @@ def test_model(logdir, infile, embedfile):
 
 
 def main():
-    logdir = "./logs/1"
+    logdir = "./tbcnn/logs/1"
     inputs = "./data/algorithm_trees.pkl"
     embeddings = "./data/pretrained_vectors.pkl"
     test_model(logdir,inputs,embeddings) 

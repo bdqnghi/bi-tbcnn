@@ -3,25 +3,26 @@ import logging
 import pickle
 import numpy as np
 import tensorflow as tf
-import classifier.tbcnn.network as network
-import classifier.tbcnn.sampling as sampling
+import network
+import sampling
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
 
 """Test a classifier to label ASTs"""
-logdir = "./classifier/logs/1"
-with open("./sampler/data/algorithm_trees.pkl", 'rb') as fh:
+logdir = "./tbcnn/logs/1"
+with open("./data/algorithm_trees.pkl", 'rb') as fh:
     _, trees, labels = pickle.load(fh)
 
-with open("./vectorizer/data/vectors.pkl", 'rb') as fh:
+with open("./data/pretrained_vectors.pkl", 'rb') as fh:
     embeddings, embed_lookup = pickle.load(fh)
     num_feats = len(embeddings[0])
 
 # build the inputs and outputs of the network
-nodes_node, children_node, hidden_node = network.init_net(
+nodes_node, children_node, pooling_node, hidden_node = network.init_net(
     num_feats,
     len(labels)
 )
+print hidden_node
 out_node = network.out_layer(hidden_node)
 
 ### init the graph
@@ -42,16 +43,34 @@ predictions = []
 step = 0
 for batch in sampling.batch_samples(
     sampling.gen_samples(trees, labels, embeddings, embed_lookup), 1
-):
+):  
+    
     nodes, children, batch_labels = batch
-    output = sess.run([out_node],
+    # hidden_output = sess.run([hidden_node],
+    #     feed_dict={
+    #         nodes_node: nodes,
+    #         children_node: children,
+    #     }
+    # )
+    # print "##################"
+    # print hidden_output
+    # output = sess.run([out_node],
+    #     feed_dict={
+    #         nodes_node: nodes,
+    #         children_node: children,
+    #     }
+    # )
+    # print output
+
+    pooling_output = sess.run([pooling_node],
         feed_dict={
             nodes_node: nodes,
             children_node: children,
         }
     )
-    print output
-    print np.argmax(output)
-    correct_labels.append(np.argmax(batch_labels))
-    predictions.append(np.argmax(output))
+    print len(pooling_output[0][0])
+    print pooling_output
+    # print np.argmax(output)
+    # correct_labels.append(np.argmax(batch_labels))
+    # predictions.append(np.argmax(output))
     # print predictions

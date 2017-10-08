@@ -8,18 +8,25 @@ def gen_samples(trees, labels, vectors, vector_lookup):
     """Creates a generator that returns a tree in BFS order with each node
     replaced by its vector embedding, and a child lookup table."""
 
+    print "number of trees : "  + str(len(trees))
     # encode labels as one-hot vectors
     label_lookup = {label: _onehot(i, len(labels)) for i, label in enumerate(labels)}
-
+    # print label_lookup
     for tree in trees:
+
         nodes = []
         children = []
         label = label_lookup[tree['label']]
 
         queue = [(tree['tree'], -1)]
+        # print queue
         while queue:
+            # print "############"
             node, parent_ind = queue.pop(0)
+            # print node
+            # print parent_ind
             node_ind = len(nodes)
+            # print "node ind : " + str(node_ind)
             # add children and the parent index to the queue
             queue.extend([(child, node_ind) for child in node['children']])
             # create a list to store this node's children indices
@@ -28,7 +35,7 @@ def gen_samples(trees, labels, vectors, vector_lookup):
             if parent_ind > -1:
                 children[parent_ind].append(node_ind)
             nodes.append(vectors[vector_lookup[node['node']]])
-
+        # print "children list length: " + str(len(children))
         yield (nodes, children, label)
 
 def batch_samples(gen, batch_size):
@@ -36,6 +43,9 @@ def batch_samples(gen, batch_size):
     nodes, children, labels = [], [], []
     samples = 0
     for n, c, l in gen:
+        # print n
+        # print c
+        # print l
         nodes.append(n)
         children.append(c)
         labels.append(l)
