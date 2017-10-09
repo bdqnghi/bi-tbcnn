@@ -1,0 +1,11 @@
+#!/bin/bash
+python="/usr/bin/time -f %e python"
+if [ ! -f data/algorithms3.pkl ]; then
+	$python fast-node-encoding/scripts/fast_merge_pickles_to_pickle.py data/ProgramData data/algorithms3.pkl
+fi
+if [ ! -f data/algorithms_nodes3.pkl ]; then
+	$python fast-node-encoding/scripts/fast_pickle_file_to_nodes.py data/algorithms3.pkl data/algorithms_nodes3.pkl
+fi
+if [ ! -f data/fast_pretrained_vectors.pkl ]; then
+	$python fast-node-encoding/fast_train.py data/algorithms_nodes3.pkl data/fast_pretrained_vectors.pkl
+fi
