@@ -107,7 +107,7 @@ def _traverse_tree(root):
 def main():
 
   
-    parse_pickle_to_training_trees("./data/fast_algorithms.pkl","./data/fast_algorithms_trees.pkl")
+    parse_pickle_to_training_trees(sys.argv[1],sys.argv[2])
 
 if __name__ == "__main__": 
     main()

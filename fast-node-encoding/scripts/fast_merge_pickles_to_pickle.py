@@ -31,7 +31,7 @@ def parse_raw_data_to_pickle(data_directory,outfile):
                 #    file_data = f.read()
                 # file_data = str(file_data)
                 ast_representation = build_tree(file_path)
-                print ast_representation
+                # print ast_representation
                 result.append({
                     'tree': ast_representation, 'metadata': {'label': label}
                 })

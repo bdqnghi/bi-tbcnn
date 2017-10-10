@@ -54,7 +54,7 @@ def learn_vectors(samples, logdir, outfile, num_feats=NUM_FEATURES, epochs=EPOCH
         sample_gen = sampling.batch_samples_for_fast(samples, BATCH_SIZE)
         for batch in sample_gen:
             input_batch, label_batch = batch
-            print label_batch
+            # print label_batch
             _, summary, embed, err = sess.run(
                 [train_step, summaries, embed_node, loss_node],
                 feed_dict={
@@ -63,7 +63,7 @@ def learn_vectors(samples, logdir, outfile, num_feats=NUM_FEATURES, epochs=EPOCH
                 }
             )
 
-            print('Epoch: ', epoch, 'Loss: ', err)
+            # print('Epoch: ', epoch, 'Loss: ', err)
             writer.add_summary(summary, step)
             if step % CHECKPOINT_EVERY == 0:
                 # save state so we can resume later

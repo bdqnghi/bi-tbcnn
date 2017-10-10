@@ -1,0 +1,3 @@
+#!/bin/bash
+docker build -t fast docker
+docker run -w /e -v $(pwd):/e -it fast bash
