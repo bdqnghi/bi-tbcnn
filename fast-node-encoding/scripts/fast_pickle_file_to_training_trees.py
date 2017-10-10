@@ -28,8 +28,7 @@ def parse_pickle_to_training_trees(infile,outfile):
         # count += 1
         tree = item['tree']
         label = item['metadata']['label']
-        with open("label.txt", "a") as f2:
-            f2.write(label + "\n")
+      
         if tree.HasField("element"):
 
             root = tree.element
