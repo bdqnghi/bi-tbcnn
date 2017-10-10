@@ -11,7 +11,7 @@ def gen_samples(trees, labels, vectors, vector_lookup):
     print "number of trees : "  + str(len(trees))
     # encode labels as one-hot vectors
     label_lookup = {label: _onehot(i, len(labels)) for i, label in enumerate(labels)}
-    # print label_lookup
+    
     for tree in trees:
 
         nodes = []
@@ -19,7 +19,7 @@ def gen_samples(trees, labels, vectors, vector_lookup):
         label = label_lookup[tree['label']]
 
         queue = [(tree['tree'], -1)]
-        # print queue
+        print queue
         while queue:
             # print "############"
             node, parent_ind = queue.pop(0)
@@ -34,6 +34,7 @@ def gen_samples(trees, labels, vectors, vector_lookup):
             # add this child to its parent's child list
             if parent_ind > -1:
                 children[parent_ind].append(node_ind)
+            
             nodes.append(vectors[vector_lookup[node['node']]])
         # print "children list length: " + str(len(children))
         yield (nodes, children, label)
