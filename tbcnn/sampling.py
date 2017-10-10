@@ -11,7 +11,8 @@ def gen_samples(trees, labels, vectors, vector_lookup):
     print "number of trees : "  + str(len(trees))
     # encode labels as one-hot vectors
     label_lookup = {label: _onehot(i, len(labels)) for i, label in enumerate(labels)}
-    
+    # print vector_lookup
+
     for tree in trees:
 
         nodes = []
@@ -35,9 +36,58 @@ def gen_samples(trees, labels, vectors, vector_lookup):
             if parent_ind > -1:
                 children[parent_ind].append(node_ind)
             
-            nodes.append(vectors[vector_lookup[node['node']]])
+            node = str(node['node'])
+            print "node : " + node
+
+            look_up_vector = vector_lookup[int(node)]
+            print "vector look up : " + str(look_up_vector)
+            nodes.append(vectors[str(vector_lookup[str(node['node'])])])
         # print "children list length: " + str(len(children))
         yield (nodes, children, label)
+
+
+def gen_fast_samples(trees, labels, vectors, vector_lookup):
+    """Creates a generator that returns a tree in BFS order with each node
+    replaced by its vector embedding, and a child lookup table."""
+
+    print "number of trees : "  + str(len(trees))
+    # encode labels as one-hot vectors
+    label_lookup = {label: _onehot(i, len(labels)) for i, label in enumerate(labels)}
+    # print vector_lookup
+    # print vectors
+    for tree in trees:
+
+        nodes = []
+        children = []
+        label = label_lookup[tree['label']]
+
+        queue = [(tree['tree'], -1)]
+        # print queue
+        while queue:
+            # print "############"
+            node, parent_ind = queue.pop(0)
+            # print node
+            # print parent_ind
+            node_ind = len(nodes)
+            # print "node ind : " + str(node_ind)
+            # add children and the parent index to the queue
+            queue.extend([(child, node_ind) for child in node['children']])
+            # create a list to store this node's children indices
+            children.append([])
+            # add this child to its parent's child list
+            if parent_ind > -1:
+                children[parent_ind].append(node_ind)
+            
+            node_index = int(node['node'])
+            # print "node : " + str(node_index)
+
+            # print vectors[node_index]
+            # look_up_vector = vector_lookup[int(node)]
+            # print "vector look up : " + str(look_up_vector)
+            nodes.append(vectors[node_index])
+        # print "children list length: " + str(len(children))
+        yield (nodes, children, label)
+
 
 def batch_samples(gen, batch_size):
     """Batch samples from a generator"""

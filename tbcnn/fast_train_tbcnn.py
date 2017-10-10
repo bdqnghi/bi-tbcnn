@@ -49,7 +49,7 @@ def train_model(logdir, infile, embedfile, epochs=EPOCHS):
     num_batches = len(trees) // BATCH_SIZE + (1 if len(trees) % BATCH_SIZE != 0 else 0)
     for epoch in range(1, epochs+1):
         for i, batch in enumerate(sampling.batch_samples(
-            sampling.gen_samples(trees, labels, embeddings, embed_lookup), BATCH_SIZE
+            sampling.gen_fast_samples(trees, labels, embeddings, embed_lookup), BATCH_SIZE
         )):
             nodes, children, batch_labels = batch
             step = (epoch - 1) * num_batches + i * BATCH_SIZE
@@ -85,7 +85,7 @@ def train_model(logdir, infile, embedfile, epochs=EPOCHS):
     predictions = []
     print('Computing training accuracy...')
     for batch in sampling.batch_samples(
-        sampling.gen_samples(trees, labels, embeddings, embed_lookup), 1
+        sampling.gen_fast_samples(trees, labels, embeddings, embed_lookup), 1
     ):
         nodes, children, batch_labels = batch
         output = sess.run([out_node],
@@ -104,10 +104,11 @@ def train_model(logdir, infile, embedfile, epochs=EPOCHS):
 
 
 def main():
-    logdir = "./tbcnn/logs/1"
-    inputs = "./data/algorithm_trees.pkl"
-    embeddings = "./data/pretrained_vectors.pkl"
+    logdir = "./tbcnn/logs/2"
+   
 
+    inputs = "./data/fast_algorithms_trees.pkl"
+    embeddings = "./data/fast_pretrained_vectors.pkl"
 
 
     train_model(logdir,inputs,embeddings) 
