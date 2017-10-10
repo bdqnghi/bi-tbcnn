@@ -19,7 +19,7 @@ def gen_samples(trees, labels, vectors, vector_lookup):
         label = label_lookup[tree['label']]
 
         queue = [(tree['tree'], -1)]
-        print queue
+        # print queue
         while queue:
             # print "############"
             node, parent_ind = queue.pop(0)

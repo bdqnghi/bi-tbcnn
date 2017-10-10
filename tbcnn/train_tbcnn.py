@@ -105,12 +105,12 @@ def train_model(logdir, infile, embedfile, epochs=EPOCHS):
 
 def main():
     logdir = "./tbcnn/logs/1"
-    # inputs = "./data/algorithm_trees.pkl"
-    # embeddings = "./data/pretrained_vectors.pkl"
+    inputs = "./data/algorithm_trees.pkl"
+    embeddings = "./data/pretrained_vectors.pkl"
 
 
-    inputs = "./data/fast_algorithms_trees.pkl"
-    embeddings = "./data/fast_pretrained_vectors.pkl"
+    # inputs = "./data/fast_algorithms_trees.pkl"
+    # embeddings = "./data/fast_pretrained_vectors.pkl"
 
 
     train_model(logdir,inputs,embeddings) 
