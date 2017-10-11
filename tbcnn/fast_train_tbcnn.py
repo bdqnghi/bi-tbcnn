@@ -1,6 +1,6 @@
 """Train the cnn model as  described in Lili Mou et al. (2015) 
 https://arxiv.org/pdf/1409.5718.pdf"""
-
+import sys
 import os
 import logging
 import pickle
@@ -107,12 +107,18 @@ def main():
     logdir = "./tbcnn/logs/2"
    
 
-    inputs = "./data/fast_algorithms_trees.pkl"
+    # inputs = "./data/fast_algorithms_trees.pkl"
+
+    # sample input for sys.argv[1]
+    inputs = "./data/10_clasess_algorithms_trees.pkl"
+    
+    # sample input for sys.argv[2]
     embeddings = "./data/fast_pretrained_vectors.pkl"
 
 
-    train_model(logdir,inputs,embeddings) 
+    # train_model(logdir,inputs,embeddings) 
 
+    train_model(logdir,sys.argv[1],sys.argv[2])
 
 if __name__ == "__main__":
     main()
