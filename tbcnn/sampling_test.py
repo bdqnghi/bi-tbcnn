@@ -9,7 +9,7 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 
 
 
-with open("./data/fast_algorithms_trees.pkl", 'rb') as fh:
+with open("./data/cpp_algorithms_trees.pkl", 'rb') as fh:
     _, trees, labels = pickle.load(fh)
 
 with open("./data/fast_pretrained_vectors.pkl", 'rb') as fh:
@@ -22,11 +22,22 @@ with open("./data/fast_pretrained_vectors.pkl", 'rb') as fh:
 
 # print sampling.gen_samples(trees, labels, embeddings, embed_lookup).next()
 count = 0
-for batch in sampling.batch_samples(sampling.gen_fast_samples(trees, labels, embeddings, embed_lookup), 1):  
+# for batch in sampling.batch_samples(sampling.gen_fast_samples(trees, labels, embeddings, embed_lookup), 1):  
     
-    nodes, children, batch_labels = batch
+#     nodes, children, batch_labels = batch
+#     if count == 0:
+#     	# print nodes
+#     	print batch_labels
+#     	print len(nodes)
+#     	break
+
+for batch in sampling.batch_siamese_samples(sampling.gen_siamese_samples(trees, labels, embeddings, embed_lookup), 1):  
+    
+    nodes, children, batch_labels, labels = batch
     if count == 0:
-    	# print nodes
-    	print batch_labels
-    	print len(nodes)
-    	break
+        # print nodes
+        print batch_labels
+        print len(nodes)
+
+        print labels
+        break

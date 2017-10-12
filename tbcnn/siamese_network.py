@@ -4,14 +4,14 @@ described in Lili Mou et al. (2015) https://arxiv.org/pdf/1409.5718.pdf"""
 import math
 import tensorflow as tf
 
-def init_net_for_siamese(feature_size, scope_name_inputs, scope_name_network):
+def init_net_for_siamese(feature_size):
     """Initialize an empty network."""
 
-    with tf.name_scope(scope_name_inputs):
+    with tf.name_scope("inputs"):
         nodes = tf.placeholder(tf.float32, shape=(None, None, feature_size), name='tree')
         children = tf.placeholder(tf.int32, shape=(None, None, None), name='children')
 
-    with tf.name_scope(scope_name_network):
+    with tf.name_scope("network"):
         conv1 = conv_layer(1, 100, nodes, children, feature_size)
         #conv2 = conv_layer(1, 10, conv1, children, 100)
         pooling = pooling_layer(conv1)
@@ -276,6 +276,8 @@ def hidden_layer_for_siamese(pooled, input_size, output_size):
 
         return tf.nn.tanh(tf.matmul(pooled, weights) + biases)
 
+def lrelu(x, alpha):
+    return tf.nn.relu(x) - alpha * tf.nn.relu(-x)
 
 def hidden_layer(pooled, input_size, output_size):
     """Create a hidden feedforward layer."""
@@ -295,7 +297,9 @@ def hidden_layer(pooled, input_size, output_size):
             tf.summary.histogram('weights', [weights])
             tf.summary.histogram('biases', [biases])
 
-        return tf.nn.tanh(tf.matmul(pooled, weights) + biases)
+        return tf.nn.elu(tf.matmul(pooled, weights) + biases)
+        # return lrelu(tf.matmul(pooled, weights) + biases, 0.01)
+
 
 def loss_layer(logits_node, label_size):
     """Create a loss layer for training."""
