@@ -3,7 +3,7 @@
 import pickle
 import numpy as np
 import random
-
+from tqdm import *
 def gen_samples(trees, labels, vectors, vector_lookup):
     """Creates a generator that returns a tree in BFS order with each node
     replaced by its vector embedding, and a child lookup table."""
@@ -46,7 +46,8 @@ def gen_samples(trees, labels, vectors, vector_lookup):
         yield (nodes, children, label)
 
 def cut_pair_wise(left_inputs,right_inputs):
-
+    random.shuffle(left_inputs)
+    random.shuffle(right_inputs)
     range_data = min(len(left_inputs), len(right_inputs))
     return left_inputs[0:range_data], right_inputs[0:range_data]
 
@@ -90,20 +91,20 @@ def produce_test_pairwise_data(left_inputs,right_inputs):
     right_trees = []
 
     
-    #left_data, right_data = cut_pair_wise(left_merge_sort, right_merge_sort)
+    # left_data, right_data = cut_pair_wise(left_merge_sort, right_merge_sort)
 
-    #left_trees.extend(left_data)
-    #right_trees.extend(right_data)
+    # left_trees.extend(left_data)
+    # right_trees.extend(right_data)
 
-    #left_data, right_data = cut_pair_wise(left_merge_sort, right_bfs)
+    # left_data, right_data = cut_pair_wise(left_merge_sort, right_bfs)
 
-    #left_trees.extend(left_data)
-    #right_trees.extend(right_data)
+    # left_trees.extend(left_data)
+    # right_trees.extend(right_data)
 
-    #left_data, right_data = cut_pair_wise(left_linked_list, right_linked_list)
+    # left_data, right_data = cut_pair_wise(left_linked_list, right_linked_list)
 
-    #left_trees.extend(left_data)
-    #right_trees.extend(right_data)
+    # left_trees.extend(left_data)
+    # right_trees.extend(right_data)
 
     #left_data, right_data = cut_pair_wise(left_linked_list, right_bubble_sort)
 
@@ -121,10 +122,10 @@ def produce_test_pairwise_data(left_inputs,right_inputs):
     # left_trees.extend(left_data)
     # right_trees.extend(right_data)
 
-    # left_data, right_data = cut_pair_wise(left_bfs, right_bfs)
+    left_data, right_data = cut_pair_wise(left_bfs, right_bfs)
 
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
+    left_trees.extend(left_data)
+    right_trees.extend(right_data)
 
     # left_data, right_data = cut_pair_wise(left_knapsack, right_merge_sort)
 
@@ -141,10 +142,10 @@ def produce_test_pairwise_data(left_inputs,right_inputs):
     #left_trees.extend(left_data)
     #right_trees.extend(right_data)
 
-    left_data, right_data = cut_pair_wise(left_knapsack, right_knapsack)
+    # left_data, right_data = cut_pair_wise(left_knapsack, right_knapsack)
 
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
+    # left_trees.extend(left_data)
+    # right_trees.extend(right_data)
 
     # left_data, right_data = cut_pair_wise(left_knapsack, right_merge_sort)
 
@@ -155,6 +156,20 @@ def produce_test_pairwise_data(left_inputs,right_inputs):
 
 
     return pairwise_trees
+
+def get_all_pairs_for_training(left_inputs,right_inputs):
+    all_1_pairs = []
+    all_0_pairs = []
+    count = 0
+    for left_tree in tqdm(left_inputs):
+        for right_tree in right_inputs:
+            if left_tree["label"] == right_tree["label"]:
+                all_1_pairs.append((left_tree,right_tree))
+            else:
+                all_0_pairs.append((left_tree,right_tree))
+            print count
+            count += 1
+    return all_1_pairs, all_0_pairs
 
 def produce_train_pairwise_data(left_inputs,right_inputs):
 
@@ -193,6 +208,8 @@ def produce_train_pairwise_data(left_inputs,right_inputs):
 
     # Conducting pairwise data, this seems stupid but let's do this first
 
+    # 1 labels 
+
     left_trees = []
     right_trees = []
     left_data, right_data = cut_pair_wise(left_merge_sort, right_merge_sort)
@@ -217,16 +234,6 @@ def produce_train_pairwise_data(left_inputs,right_inputs):
 
 
     left_data, right_data = cut_pair_wise(left_knapsack, right_knapsack)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = cut_pair_wise(left_knapsack, right_knapsack)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = cut_pair_wise(left_merge_sort, right_merge_sort)
 
     left_trees.extend(left_data)
     right_trees.extend(right_data)
@@ -272,7 +279,12 @@ def produce_train_pairwise_data(left_inputs,right_inputs):
     left_trees.extend(left_data)
     right_trees.extend(right_data)
 
-    #############
+    left_data, right_data = cut_pair_wise(left_knapsack, right_bubble_sort)
+
+    left_trees.extend(left_data)
+    right_trees.extend(right_data)
+
+    # #############
     all_the_right_trees = [right_merge_sort, right_linked_list, right_quick_sort, right_bfs, right_knapsack, right_bubble_sort]
     
     left_data, right_data = generate_zero_pairwise(left_merge_sort,[right_linked_list, right_quick_sort, right_bfs, right_knapsack, right_bubble_sort])

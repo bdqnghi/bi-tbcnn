@@ -5,7 +5,7 @@ import tensorflow as tf
 import numpy as np
 import siamese_network as network
 import sampling as sampling
-from parameters import LEARN_RATE, EPOCHS, CHECKPOINT_EVERY, BATCH_SIZE
+from parameters import LEARN_RATE, EPOCHS, CHECKPOINT_EVERY, BATCH_SIZE, DROP_OUT
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import random
 
@@ -13,6 +13,7 @@ def get_one_hot_similarity_label(left_labels, right_labels):
     sim_labels = []
     sim_labels_num = []
     for i in range(0,len(left_labels)):
+        print left_labels[i] + "," + right_labels[i]
         if left_labels[i] == right_labels[i]:
             sim_labels.append([0.0,1.0])
             sim_labels_num.append(1)
@@ -35,19 +36,34 @@ def get_one_hot_similarity_label(left_labels, right_labels):
 #                 sim_labels_num.append(0)
 #     return sim_labels, sim_labels_num
 
+def get_trees_from_pairs(label_1_pairs,labeL_0_pairs):
+    all_pairs = label_1_pairs + labeL_0_pairs
+    random.shuffle(all_pairs)
+    left_trees = []
+    right_trees = []
+    for pair in all_pairs:
+        left_trees.append(pair[0])
+        right_trees.append(pair[1])
+    return left_trees, right_trees
 
-def train_model(logdir, left_inputs, right_inputs, embedfile, epochs=EPOCHS):
+
+def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
+
     """Train a classifier to label ASTs"""
 
 
     n_classess = 2
+    left_algo_labels = ['mergesort', 'linkedlist', 'quicksort', 'bfs', 'bubblesort', 'knapsack']
+    right_algo_labels = ['mergesort', 'linkedlist', 'quicksort', 'bfs', 'bubblesort', 'knapsack']
+    # with open(left_inputs, 'rb') as fh:
+    #     left_trees, _, left_algo_labels = pickle.load(fh)
 
-    with open(left_inputs, 'rb') as fh:
-        left_trees, _, left_algo_labels = pickle.load(fh)
 
+    # with open(right_inputs, 'rb') as fh:
+    #     right_trees, _, right_algo_labels = pickle.load(fh)
 
-    with open(right_inputs, 'rb') as fh:
-        right_trees, _, right_algo_labels = pickle.load(fh)
+    with open(inputs, "rb") as fh:
+        all_1_pairs, all_0_pairs = pickle.load(fh)
 
     with open(embedfile, 'rb') as fh:
         embeddings, embed_lookup = pickle.load(fh)
@@ -64,11 +80,13 @@ def train_model(logdir, left_inputs, right_inputs, embedfile, epochs=EPOCHS):
 
     merge_node = tf.concat([left_pooling_node, right_pooling_node], -1)
 
+    hidden_node = network.hidden_layer(merge_node, 200, 200)
+    hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=False)
 
-    # hidden_node_1 = network.hidden_layer(merge_node, 200, 100)
-    # hidden_node_2 = network.hidden_layer(hidden_node_1, 100, 50)
+    hidden_node = network.hidden_layer(hidden_node, 200, 200)
+    hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=False)
 
-    hidden_node = network.hidden_layer(merge_node, 200, n_classess)
+    hidden_node = network.hidden_layer(hidden_node, 200, n_classess)
 
 
     out_node = network.out_layer(hidden_node)
@@ -99,12 +117,14 @@ def train_model(logdir, left_inputs, right_inputs, embedfile, epochs=EPOCHS):
     steps = 0
 
     print "Preparing data..."
-    temp_zip = sampling.produce_train_pairwise_data(left_trees,right_trees)
+    # temp_zip = sampling.produce_train_pairwise_data(left_trees,right_trees)
+   
 
     print "Finish prepraring....."
     for epoch in range(1, epochs+1):
-        random.shuffle(temp_zip)
-        shuffle_left_trees, shuffle_right_trees = zip(*temp_zip)
+        sample_1_pairs = random.sample(all_1_pairs,1000)
+        sample_0_pairs = random.sample(all_0_pairs,1000)
+        shuffle_left_trees, shuffle_right_trees = get_trees_from_pairs(sample_1_pairs,sample_0_pairs)
         print("Left left:",len(shuffle_left_trees),"Len right:",len(shuffle_right_trees))
         for left_gen_batch, right_gen_batch in sampling.batch_siamese_random_samples(shuffle_left_trees, left_algo_labels, shuffle_right_trees, right_algo_labels, embeddings, embed_lookup, BATCH_SIZE):
             
@@ -168,16 +188,19 @@ def train_model(logdir, left_inputs, right_inputs, embedfile, epochs=EPOCHS):
 
    
 def main():
-    logdir = "./tbcnn/logs/3"
-    cpp_inputs = "./data/cpp_algorithms_trees.pkl"
+    logdir = "./tbcnn/logs/5"
+    # cpp_inputs = "./data/cpp_algorithms_trees.pkl"
 
-    java_inputs = "./data/java_algorithms_trees.pkl"
+    # java_inputs = "./data/java_algorithms_trees.pkl"
 
     embeddings = "./data/fast_pretrained_vectors.pkl"
 
+    all_pairs_input = "./data/all_training_pairs.pkl"
 
 
-    train_model(logdir,cpp_inputs, java_inputs, embeddings) 
+    train_model(logdir,all_pairs_input, embeddings) 
+
+    # train_model(logdir,cpp_inputs, java_inputs, embeddings) 
 
 
 if __name__ == "__main__":

@@ -20,29 +20,6 @@ def init_net_for_siamese(feature_size):
     return nodes, children, pooling
 
 
-def init_net(feature_size, label_size):
-    """Initialize an empty network."""
-    
-    with tf.name_scope('inputs'):
-        nodes = tf.placeholder(tf.float32, shape=(None, None, feature_size), name='tree')
-        children = tf.placeholder(tf.int32, shape=(None, None, None), name='children')
-
-    with tf.name_scope('network'):
-        conv1 = conv_layer(1, 100, nodes, children, feature_size)
-        #conv2 = conv_layer(1, 10, conv1, children, 100)
-        pooling = pooling_layer(conv1)
-        hidden = hidden_layer(pooling, 100, label_size)
-
-    with tf.name_scope('summaries'):
-        tf.summary.scalar('tree_size', tf.shape(nodes)[1])
-        tf.summary.scalar('child_size', tf.shape(children)[2])
-        tf.summary.histogram('logits', hidden)
-        tf.summary.image('inputs', tf.expand_dims(nodes, axis=3))
-        tf.summary.image('conv1', tf.expand_dims(conv1, axis=3))
-        #tf.summary.image('conv2', tf.expand_dims(conv2, axis=3))
-
-    return nodes, children, pooling, hidden
-
 def conv_layer(num_conv, output_size, nodes, children, feature_size):
     """Creates a convolution layer with num_conv convolutions merged together at
     the output. Final output will be a tensor with shape
@@ -256,25 +233,6 @@ def pooling_layer(nodes):
         pooled = tf.reduce_max(nodes, axis=1)
         return pooled
 
-def hidden_layer_for_siamese(pooled, input_size, output_size):
-    """Create a hidden feedforward layer."""
-    with tf.name_scope("hidden"):
-        weights = tf.Variable(
-            tf.truncated_normal(
-                [input_size, output_size], stddev=1.0 / math.sqrt(input_size)
-            ),
-            name='weights'
-        )
-
-        init = tf.truncated_normal([output_size,], stddev=math.sqrt(2.0/input_size))
-        #init = tf.zeros([output_size,])
-        biases = tf.Variable(init, name='biases')
-
-        with tf.name_scope('summaries'):
-            tf.summary.histogram('weights', [weights])
-            tf.summary.histogram('biases', [biases])
-
-        return tf.nn.tanh(tf.matmul(pooled, weights) + biases)
 
 def lrelu(x, alpha):
     return tf.nn.relu(x) - alpha * tf.nn.relu(-x)
@@ -297,8 +255,8 @@ def hidden_layer(pooled, input_size, output_size):
             tf.summary.histogram('weights', [weights])
             tf.summary.histogram('biases', [biases])
 
-        return tf.nn.elu(tf.matmul(pooled, weights) + biases)
-        # return lrelu(tf.matmul(pooled, weights) + biases, 0.01)
+        # return tf.nn.lrelu(tf.matmul(pooled, weights) + biases)
+        return lrelu(tf.matmul(pooled, weights) + biases, 0.01)
 
 
 def loss_layer(logits_node, label_size):
