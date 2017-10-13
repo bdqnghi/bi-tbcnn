@@ -90,25 +90,25 @@ def produce_test_pairwise_data(left_inputs,right_inputs):
     right_trees = []
 
     
-    left_data, right_data = cut_pair_wise(left_merge_sort, right_merge_sort)
+    #left_data, right_data = cut_pair_wise(left_merge_sort, right_merge_sort)
 
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
+    #left_trees.extend(left_data)
+    #right_trees.extend(right_data)
 
-    # left_data, right_data = cut_pair_wise(left_merge_sort, right_bfs)
+    #left_data, right_data = cut_pair_wise(left_merge_sort, right_bfs)
 
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
+    #left_trees.extend(left_data)
+    #right_trees.extend(right_data)
 
-    # left_data, right_data = cut_pair_wise(left_linked_list, right_linked_list)
+    #left_data, right_data = cut_pair_wise(left_linked_list, right_linked_list)
 
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
+    #left_trees.extend(left_data)
+    #right_trees.extend(right_data)
 
-    # left_data, right_data = cut_pair_wise(left_linked_list, right_bubble_sort)
+    #left_data, right_data = cut_pair_wise(left_linked_list, right_bubble_sort)
 
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
+    #left_trees.extend(left_data)
+    #right_trees.extend(right_data)
 
     # left_data, right_data = cut_pair_wise(left_quick_sort, right_quick_sort)
 
@@ -131,20 +131,20 @@ def produce_test_pairwise_data(left_inputs,right_inputs):
     # left_trees.extend(left_data)
     # right_trees.extend(right_data)
 
-    # left_data, right_data = cut_pair_wise(left_bubble_sort, right_bubble_sort)
+    #left_data, right_data = cut_pair_wise(left_bubble_sort, right_bubble_sort)
 
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
+    #left_trees.extend(left_data)
+    #right_trees.extend(right_data)
 
-    # left_data, right_data = cut_pair_wise(left_bubble_sort, right_merge_sort)
+    #left_data, right_data = cut_pair_wise(left_bubble_sort, right_merge_sort)
 
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
+    #left_trees.extend(left_data)
+    #right_trees.extend(right_data)
 
-    # left_data, right_data = cut_pair_wise(left_knapsack, right_knapsack)
+    left_data, right_data = cut_pair_wise(left_knapsack, right_knapsack)
 
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
+    left_trees.extend(left_data)
+    right_trees.extend(right_data)
 
     # left_data, right_data = cut_pair_wise(left_knapsack, right_merge_sort)
 
