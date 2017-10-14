@@ -7,7 +7,7 @@ import siamese_network as network
 import sampling as sampling
 from parameters import LEARN_RATE, EPOCHS, CHECKPOINT_EVERY, TEST_BATCH_SIZE, DROP_OUT
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
-
+import sys
 
 def get_one_hot_similarity_label(left_labels, right_labels):
     sim_labels = []
