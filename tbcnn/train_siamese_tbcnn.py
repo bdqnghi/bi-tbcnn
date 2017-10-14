@@ -155,52 +155,18 @@ def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
     
             steps+=1
         steps = 0
-    # saver.save(sess, os.path.join(checkfile), steps)
-
-     # compute the training accuracy
-
-
-    # correct_labels = []
-    # predictions = []
-    # print('Computing training accuracy...')
-    # for left_gen_batch, right_gen_batch in sampling.batch_siamese_random_samples(shuffle_left_trees, left_algo_labels, shuffle_right_trees, right_algo_labels, embeddings, embed_lookup, BATCH_SIZE):
-    #     left_nodes, left_children, left_labels_one_hot, left_labels = left_gen_batch
-
-    #     right_nodes, right_children, right_labels_one_hot, right_labels = right_gen_batch
-    #     sim_labels, _ = get_one_hot_similarity_label(left_labels,right_labels)
-           
-    #     output = sess.run([out_node],
-    #         feed_dict={
-    #             left_nodes_node: left_nodes,
-    #             left_children_node: left_children,
-    #             right_nodes_node: right_nodes,
-    #             right_children_node: right_children,
-    #             labels_node: sim_labels
-    #         }
-    #     )
-    #     correct_labels.append(np.argmax(sim_labels[0]))
-    #     predictions.append(np.argmax(output[0]))
-
-    # # target_names = list(labels)
-    # print('Accuracy:', accuracy_score(correct_labels, predictions))
-    # print(classification_report(correct_labels, predictions, target_names=target_names))
-    # print(confusion_matrix(correct_labels, predictions))
-
    
 def main():
-    logdir = "./tbcnn/logs/5"
-    # cpp_inputs = "./data/cpp_algorithms_trees.pkl"
-
-    # java_inputs = "./data/java_algorithms_trees.pkl"
-
+    logdir = "./tbcnn/logs/yijun"
+  
     embeddings = "./data/fast_pretrained_vectors.pkl"
 
     all_pairs_input = "./data/all_training_pairs.pkl"
 
+    # train_model(logdir,all_pairs_input, embeddings) 
 
-    train_model(logdir,all_pairs_input, embeddings) 
-
-    # train_model(logdir,cpp_inputs, java_inputs, embeddings) 
+    train_mode(sys.argv[0],sys.argv[1],sys.argv[2])
+    
 
 
 if __name__ == "__main__":
