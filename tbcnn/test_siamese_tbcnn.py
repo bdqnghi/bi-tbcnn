@@ -8,19 +8,7 @@ import sampling as sampling
 from parameters import LEARN_RATE, EPOCHS, CHECKPOINT_EVERY, TEST_BATCH_SIZE, DROP_OUT
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
-# def get_one_hot_similarity_label(left_labels, right_labels):
-#     sim_labels = []
-#     sim_labels_num = []
-#     for left in left_labels:
-#         for right in right_labels:
-#             if left == right:
 
-#                 sim_labels.append([0.0,1.0])
-#                 sim_labels_num.append(1)
-#             else:
-#                 sim_labels.append([1.0,0.0])
-#                 sim_labels_num.append(0)
-#     return sim_labels, sim_labels_num
 def get_one_hot_similarity_label(left_labels, right_labels):
     sim_labels = []
     sim_labels_num = []
@@ -147,17 +135,14 @@ def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
 
    
 def main():
-    logdir = "./tbcnn/logs/5"
-    # cpp_inputs = "./data/cpp_algorithms_trees.pkl"
-
-    # java_inputs = "./data/java_algorithms_trees.pkl"
-
+    logdir = "./tbcnn/logs/yijun"
+  
     embeddings = "./data/fast_pretrained_vectors.pkl"
 
     test_inputs = "./data/4000_testing_pairs.pkl"
 
-    train_model(logdir,test_inputs, embeddings) 
-
+    # train_model(logdir,test_inputs, embeddings) 
+    train_model(sys.argv[1],sys.argv[2],sys.argv[3])
     # train_model(logdir,cpp_inputs, java_inputs, embeddings) 
 
 
