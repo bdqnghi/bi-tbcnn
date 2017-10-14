@@ -8,7 +8,7 @@ import sampling as sampling
 from parameters import LEARN_RATE, EPOCHS, CHECKPOINT_EVERY, BATCH_SIZE, DROP_OUT
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import random
-
+import sys
 def get_one_hot_similarity_label(left_labels, right_labels):
     sim_labels = []
     sim_labels_num = []
@@ -165,7 +165,7 @@ def main():
 
     # train_model(logdir,all_pairs_input, embeddings) 
 
-    train_mode(sys.argv[0],sys.argv[1],sys.argv[2])
+    train_model(sys.argv[0],sys.argv[1],sys.argv[2])
     
 
 
