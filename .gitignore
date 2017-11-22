@@ -100,6 +100,10 @@ ENV/
 # mypy
 .mypy_cache/
 
-logs/
-
-/data/raw
+code/
+ast/
+vec/
+model/
+old/
+.keras/keras.json
+fast-node-encoding/logs/algorithm

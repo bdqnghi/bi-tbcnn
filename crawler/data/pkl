@@ -1,5 +1,0 @@
-cp -r new_data new_data.pkl
-cd new_data.pkl
-find . -name *.cpp | xargs rm -f
-find . -name *.java | xargs rm -f
-find . -name *.pb | xargs rm -f

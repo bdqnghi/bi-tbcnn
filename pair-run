@@ -1,6 +1,0 @@
-#!/bin/bash
-python="/usr/bin/time -f %e python"
-#docker build -t tbcnn docker
-#gzip -dc data/java_pretrained_vectors.pkl.gz > data/java_pretrained_vectors.pkl
-#docker run -w /root -v $(pwd):/root -it tbcnn python tbcnn/train_siamese_tbcnn.py
-docker run -w /root -v $(pwd):/root -it tbcnn $python tbcnn/test_siamese_tbcnn.py

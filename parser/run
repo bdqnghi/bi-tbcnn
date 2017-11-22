@@ -1,0 +1,30 @@
+#!/bin/sh
+if [ ! -f /tmp/convert ]; then
+	cat > /tmp/convert <<EOF
+#!/bin/bash
+src_file=\$1
+mkdir -p /ast/\$(dirname \$src_file)
+if [ "\${src_file/.python/}" == "\${src_file}" ]; then
+	pkl_file=/ast/\$src_file.pkl
+	if [ ! -f \$pkl_file ]; then
+		pb_file=/ast/\$src_file.pb
+		if [ ! -f \$pb_file ]; then
+			fast \$src_file \$pb_file
+		fi
+		fast \$pb_file \$pkl_file
+		rm -f \$pb_file
+	fi
+else
+	pkl_file=/ast/\$src_file.pkl
+	python /bi-tbcnn/parser/python_to_pickle.py \$src_file \$pkl_file
+fi
+EOF
+	chmod +x /tmp/convert
+fi
+cd /code 
+ls | while read f; do
+	if [ -d $f ]; then
+		parallel --eta /tmp/convert ::: $f/*/*
+	fi
+done
+cd -
