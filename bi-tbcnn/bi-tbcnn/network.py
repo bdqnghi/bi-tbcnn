@@ -4,28 +4,21 @@ described in Lili Mou et al. (2015) https://arxiv.org/pdf/1409.5718.pdf"""
 import math
 import tensorflow as tf
 
-def init_net(feature_size, label_size):
+def init_net_for_siamese(feature_size):
     """Initialize an empty network."""
 
-    with tf.name_scope('inputs'):
+    with tf.name_scope("inputs"):
         nodes = tf.placeholder(tf.float32, shape=(None, None, feature_size), name='tree')
         children = tf.placeholder(tf.int32, shape=(None, None, None), name='children')
 
-    with tf.name_scope('network'):
+    with tf.name_scope("network"):
         conv1 = conv_layer(1, 100, nodes, children, feature_size)
         #conv2 = conv_layer(1, 10, conv1, children, 100)
         pooling = pooling_layer(conv1)
-        hidden = hidden_layer(pooling, 100, label_size)
+     
 
-    with tf.name_scope('summaries'):
-        tf.summary.scalar('tree_size', tf.shape(nodes)[1])
-        tf.summary.scalar('child_size', tf.shape(children)[2])
-        tf.summary.histogram('logits', hidden)
-        tf.summary.image('inputs', tf.expand_dims(nodes, axis=3))
-        tf.summary.image('conv1', tf.expand_dims(conv1, axis=3))
-        #tf.summary.image('conv2', tf.expand_dims(conv2, axis=3))
+    return nodes, children, pooling
 
-    return nodes, children, hidden
 
 def conv_layer(num_conv, output_size, nodes, children, feature_size):
     """Creates a convolution layer with num_conv convolutions merged together at
@@ -59,6 +52,64 @@ def conv_node(nodes, children, feature_size, output_size):
             tf.summary.histogram('b_conv', [b_conv])
 
         return conv_step(nodes, children, feature_size, w_t, w_r, w_l, b_conv)
+
+def conv_step(nodes, children, feature_size, w_t, w_r, w_l, b_conv):
+    """Convolve a batch of nodes and children.
+
+    Lots of high dimensional tensors in this function. Intuitively it makes
+    more sense if we did this work with while loops, but computationally this
+    is more efficient. Don't try to wrap your head around all the tensor dot
+    products, just follow the trail of dimensions.
+    """
+    with tf.name_scope('conv_step'):
+        # nodes is shape (batch_size x max_tree_size x feature_size)
+        # children is shape (batch_size x max_tree_size x max_children)
+
+        with tf.name_scope('trees'):
+            # children_vectors will have shape
+            # (batch_size x max_tree_size x max_children x feature_size)
+            children_vectors = children_tensor(nodes, children, feature_size)
+
+            # add a 4th dimension to the nodes tensor
+            nodes = tf.expand_dims(nodes, axis=2)
+            # tree_tensor is shape
+            # (batch_size x max_tree_size x max_children + 1 x feature_size)
+            tree_tensor = tf.concat([nodes, children_vectors], axis=2, name='trees')
+
+        with tf.name_scope('coefficients'):
+            # coefficient tensors are shape (batch_size x max_tree_size x max_children + 1)
+            c_t = eta_t(children)
+            c_r = eta_r(children, c_t)
+            c_l = eta_l(children, c_t, c_r)
+
+            # concatenate the position coefficients into a tensor
+            # (batch_size x max_tree_size x max_children + 1 x 3)
+            coef = tf.stack([c_t, c_r, c_l], axis=3, name='coef')
+
+        with tf.name_scope('weights'):
+            # stack weight matrices on top to make a weight tensor
+            # (3, feature_size, output_size)
+            weights = tf.stack([w_t, w_r, w_l], axis=0)
+
+        with tf.name_scope('combine'):
+            batch_size = tf.shape(children)[0]
+            max_tree_size = tf.shape(children)[1]
+            max_children = tf.shape(children)[2]
+
+            # reshape for matrix multiplication
+            x = batch_size * max_tree_size
+            y = max_children + 1
+            result = tf.reshape(tree_tensor, (x, y, feature_size))
+            coef = tf.reshape(coef, (x, y, 3))
+            result = tf.matmul(result, coef, transpose_a=True)
+            result = tf.reshape(result, (batch_size, max_tree_size, 3, feature_size))
+
+            # output is (batch_size, max_tree_size, output_size)
+            result = tf.tensordot(result, weights, [[2, 3], [0, 1]])
+
+            # output is (batch_size, max_tree_size, output_size)
+            return tf.nn.tanh(result + b_conv, name='conv')
+
 
 def children_tensor(nodes, children, feature_size):
     """Build the children tensor from the input nodes and child lookup."""
@@ -175,68 +226,16 @@ def eta_l(children, coef_t, coef_r):
             tf.multiply((1.0 - coef_t), (1.0 - coef_r)), mask, name='coef_l'
         )
 
-def conv_step(nodes, children, feature_size, w_t, w_r, w_l, b_conv):
-    """Convolve a batch of nodes and children.
-
-    Lots of high dimensional tensors in this function. Intuitively it makes
-    more sense if we did this work with while loops, but computationally this
-    is more efficient. Don't try to wrap your head around all the tensor dot
-    products, just follow the trail of dimensions.
-    """
-    with tf.name_scope('conv_step'):
-        # nodes is shape (batch_size x max_tree_size x feature_size)
-        # children is shape (batch_size x max_tree_size x max_children)
-
-        with tf.name_scope('trees'):
-            # children_vectors will have shape
-            # (batch_size x max_tree_size x max_children x feature_size)
-            children_vectors = children_tensor(nodes, children, feature_size)
-
-            # add a 4th dimension to the nodes tensor
-            nodes = tf.expand_dims(nodes, axis=2)
-            # tree_tensor is shape
-            # (batch_size x max_tree_size x max_children + 1 x feature_size)
-            tree_tensor = tf.concat([nodes, children_vectors], axis=2, name='trees')
-
-        with tf.name_scope('coefficients'):
-            # coefficient tensors are shape (batch_size x max_tree_size x max_children + 1)
-            c_t = eta_t(children)
-            c_r = eta_r(children, c_t)
-            c_l = eta_l(children, c_t, c_r)
-
-            # concatenate the position coefficients into a tensor
-            # (batch_size x max_tree_size x max_children + 1 x 3)
-            coef = tf.stack([c_t, c_r, c_l], axis=3, name='coef')
-
-        with tf.name_scope('weights'):
-            # stack weight matrices on top to make a weight tensor
-            # (3, feature_size, output_size)
-            weights = tf.stack([w_t, w_r, w_l], axis=0)
-
-        with tf.name_scope('combine'):
-            batch_size = tf.shape(children)[0]
-            max_tree_size = tf.shape(children)[1]
-            max_children = tf.shape(children)[2]
-
-            # reshape for matrix multiplication
-            x = batch_size * max_tree_size
-            y = max_children + 1
-            result = tf.reshape(tree_tensor, (x, y, feature_size))
-            coef = tf.reshape(coef, (x, y, 3))
-            result = tf.matmul(result, coef, transpose_a=True)
-            result = tf.reshape(result, (batch_size, max_tree_size, 3, feature_size))
-
-            # output is (batch_size, max_tree_size, output_size)
-            result = tf.tensordot(result, weights, [[2, 3], [0, 1]])
-
-            # output is (batch_size, max_tree_size, output_size)
-            return tf.nn.tanh(result + b_conv, name='conv')
 
 def pooling_layer(nodes):
     """Creates a max dynamic pooling layer from the nodes."""
     with tf.name_scope("pooling"):
         pooled = tf.reduce_max(nodes, axis=1)
         return pooled
+
+
+def lrelu(x, alpha):
+    return tf.nn.relu(x) - alpha * tf.nn.relu(-x)
 
 def hidden_layer(pooled, input_size, output_size):
     """Create a hidden feedforward layer."""
@@ -256,7 +255,9 @@ def hidden_layer(pooled, input_size, output_size):
             tf.summary.histogram('weights', [weights])
             tf.summary.histogram('biases', [biases])
 
-        return tf.nn.tanh(tf.matmul(pooled, weights) + biases)
+        # return tf.nn.lrelu(tf.matmul(pooled, weights) + biases)
+        return lrelu(tf.matmul(pooled, weights) + biases, 0.01)
+
 
 def loss_layer(logits_node, label_size):
     """Create a loss layer for training."""

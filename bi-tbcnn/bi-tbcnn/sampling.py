@@ -48,111 +48,6 @@ def cut_pair_wise(left_inputs,right_inputs):
     range_data = min(len(left_inputs), len(right_inputs))
     return left_inputs[0:range_data], right_inputs[0:range_data]
 
-def produce_test_pairwise_data(left_inputs,right_inputs):
-
-    labels_list = ["mergesort","linkedlist","quicksort","bfs","bubblesort","knapsack"]
-
-    left_merge_sort, left_linked_list, left_quick_sort, left_bfs, left_bubble_sort, left_knapsack = [],[],[],[],[],[]
-    right_merge_sort, right_linked_list, right_quick_sort, right_bfs, right_bubble_sort, right_knapsack = [],[],[],[],[],[]
-    for inp in left_inputs:
-        if inp["label"] == "mergesort":
-            left_merge_sort.append(inp)
-        if inp["label"] == "linkedlist":
-            left_linked_list.append(inp)
-        if inp["label"] == "quicksort":
-            left_quick_sort.append(inp)
-        if inp["label"] == "bfs":
-            left_bfs.append(inp)
-        if inp["label"] == "bubblesort":
-            left_bubble_sort.append(inp)
-        if inp["label"] == "knapsack":
-            left_knapsack.append(inp)
-
-
-    for inp in right_inputs:
-        if inp["label"] == "mergesort":
-            right_merge_sort.append(inp)
-        if inp["label"] == "linkedlist":
-            right_linked_list.append(inp)
-        if inp["label"] == "quicksort":
-            right_quick_sort.append(inp)
-        if inp["label"] == "bfs":
-            right_bfs.append(inp)
-        if inp["label"] == "bubblesort":
-            right_bubble_sort.append(inp)
-        if inp["label"] == "knapsack":
-            right_knapsack.append(inp)
-
-    # Conducting pairwise data, this seems stupid but let's do this first
-    left_trees = []
-    right_trees = []
-
-    
-    # left_data, right_data = cut_pair_wise(left_merge_sort, right_merge_sort)
-
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
-
-    # left_data, right_data = cut_pair_wise(left_merge_sort, right_bfs)
-
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
-
-    # left_data, right_data = cut_pair_wise(left_linked_list, right_linked_list)
-
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
-
-    #left_data, right_data = cut_pair_wise(left_linked_list, right_bubble_sort)
-
-    #left_trees.extend(left_data)
-    #right_trees.extend(right_data)
-
-    # left_data, right_data = cut_pair_wise(left_quick_sort, right_quick_sort)
-
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
-
-    # left_data, right_data = cut_pair_wise(left_quick_sort, right_knapsack)
-
-
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
-
-    left_data, right_data = cut_pair_wise(left_bfs, right_bfs)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    # left_data, right_data = cut_pair_wise(left_knapsack, right_merge_sort)
-
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
-
-    #left_data, right_data = cut_pair_wise(left_bubble_sort, right_bubble_sort)
-
-    #left_trees.extend(left_data)
-    #right_trees.extend(right_data)
-
-    #left_data, right_data = cut_pair_wise(left_bubble_sort, right_merge_sort)
-
-    #left_trees.extend(left_data)
-    #right_trees.extend(right_data)
-
-    # left_data, right_data = cut_pair_wise(left_knapsack, right_knapsack)
-
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
-
-    # left_data, right_data = cut_pair_wise(left_knapsack, right_merge_sort)
-
-    # left_trees.extend(left_data)
-    # right_trees.extend(right_data)
-
-    pairwise_trees = zip(left_trees,right_trees)
-
-
-    return pairwise_trees
 
 def get_all_pairs_for_training(left_inputs,right_inputs):
     all_1_pairs = []
@@ -168,155 +63,6 @@ def get_all_pairs_for_training(left_inputs,right_inputs):
             count += 1
     return all_1_pairs, all_0_pairs
 
-def produce_train_pairwise_data(left_inputs,right_inputs):
-
-    labels_list = ["mergesort","linkedlist","quicksort","bfs","bubblesort","knapsack"]
-
-    left_merge_sort, left_linked_list, left_quick_sort, left_bfs, left_bubble_sort, left_knapsack = [],[],[],[],[],[]
-    right_merge_sort, right_linked_list, right_quick_sort, right_bfs, right_bubble_sort, right_knapsack = [],[],[],[],[],[]
-    for inp in left_inputs:
-        if inp["label"] == "mergesort":
-            left_merge_sort.append(inp)
-        if inp["label"] == "linkedlist":
-            left_linked_list.append(inp)
-        if inp["label"] == "quicksort":
-            left_quick_sort.append(inp)
-        if inp["label"] == "bfs":
-            left_bfs.append(inp)
-        if inp["label"] == "bubblesort":
-            left_bubble_sort.append(inp)
-        if inp["label"] == "knapsack":
-            left_knapsack.append(inp)
-
-
-    for inp in right_inputs:
-        if inp["label"] == "mergesort":
-            right_merge_sort.append(inp)
-        if inp["label"] == "linkedlist":
-            right_linked_list.append(inp)
-        if inp["label"] == "quicksort":
-            right_quick_sort.append(inp)
-        if inp["label"] == "bfs":
-            right_bfs.append(inp)
-        if inp["label"] == "bubblesort":
-            right_bubble_sort.append(inp)
-        if inp["label"] == "knapsack":
-            right_knapsack.append(inp)
-
-    # Conducting pairwise data, this seems stupid but let's do this first
-
-    # 1 labels 
-
-    left_trees = []
-    right_trees = []
-    left_data, right_data = cut_pair_wise(left_merge_sort, right_merge_sort)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = cut_pair_wise(left_linked_list, right_linked_list)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = cut_pair_wise(left_quick_sort, right_quick_sort)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = cut_pair_wise(left_bfs, right_bfs)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-
-    left_data, right_data = cut_pair_wise(left_knapsack, right_knapsack)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-
-    left_data, right_data = cut_pair_wise(left_bubble_sort, right_bubble_sort)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-
-    # 0 labels
-
-    left_data, right_data = cut_pair_wise(left_linked_list, right_knapsack)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = cut_pair_wise(left_quick_sort, right_bfs)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-
-    left_data, right_data = cut_pair_wise(left_bfs, right_bubble_sort)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = cut_pair_wise(left_bubble_sort, right_linked_list)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = cut_pair_wise(left_merge_sort, right_bubble_sort)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-   
-    left_data, right_data = cut_pair_wise(left_knapsack, right_merge_sort)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = cut_pair_wise(left_knapsack, right_bubble_sort)
-
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    # #############
-    all_the_right_trees = [right_merge_sort, right_linked_list, right_quick_sort, right_bfs, right_knapsack, right_bubble_sort]
-    
-    left_data, right_data = generate_zero_pairwise(left_merge_sort,[right_linked_list, right_quick_sort, right_bfs, right_knapsack, right_bubble_sort])
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = generate_zero_pairwise(left_linked_list,[right_merge_sort, right_quick_sort, right_bfs, right_knapsack, right_bubble_sort])
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = generate_zero_pairwise(left_quick_sort,[right_merge_sort, right_linked_list, right_bfs, right_knapsack, right_bubble_sort])
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = generate_zero_pairwise(left_bfs,[right_merge_sort, right_linked_list, right_quick_sort, right_knapsack, right_bubble_sort])
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = generate_zero_pairwise(left_knapsack,[right_merge_sort, right_linked_list, right_quick_sort, right_bfs, right_bubble_sort])
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-    left_data, right_data = generate_zero_pairwise(left_bubble_sort,[right_merge_sort, right_linked_list, right_quick_sort, right_bfs, right_knapsack])
-    left_trees.extend(left_data)
-    right_trees.extend(right_data)
-
-
-
-    pairwise_trees = zip(left_trees,right_trees)
-
-
-    return pairwise_trees
-
-    # return zip(*pairwise_trees)
-
 def generate_zero_pairwise(source,targets):
     source_part = len(source)/len(targets)
     right_data = []
@@ -330,7 +76,7 @@ def generate_zero_pairwise(source,targets):
     random.shuffle(right_data)
     return left_data[0:len(left_data)/5],right_data[0:len(right_data)/5]
 
-def batch_siamese_random_samples(left_trees, left_labels, right_trees, right_labels, vectors, vector_lookup, batch_size):
+def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_labels, vectors, vector_lookup, batch_size):
     """Creates a generator that returns a tree in BFS order with each node
     replaced by its vector embedding, and a child lookup table."""
 
@@ -418,12 +164,6 @@ def batch_siamese_random_samples(left_trees, left_labels, right_trees, right_lab
 
     if batch_left_nodes and batch_right_labels:
         yield _pad_batch_siamese_2_side(batch_left_nodes, batch_left_children,batch_left_labels_one_hot, batch_left_labels, batch_right_nodes, batch_right_children,batch_right_labels_one_hot, batch_right_labels)
-
-
-
-
-
-
 
 
 def gen_fast_samples(trees, labels, vectors, vector_lookup):

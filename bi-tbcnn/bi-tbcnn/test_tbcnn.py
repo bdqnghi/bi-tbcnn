@@ -1,31 +1,89 @@
-"""Commands for testing a trained classifier."""
-
 import os
 import logging
 import pickle
-import numpy as np
 import tensorflow as tf
-import network as network
+import numpy as np
+import networks as network
 import sampling as sampling
+from parameters import LEARN_RATE, EPOCHS, CHECKPOINT_EVERY, TEST_BATCH_SIZE, DROP_OUT
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import sys
 
-def test_model(logdir, infile, embedfile):
-    """Test a classifier to label ASTs"""
+def get_one_hot_similarity_label(left_labels, right_labels):
+    sim_labels = []
+    sim_labels_num = []
+    for i in range(0,len(left_labels)):
+        print left_labels[i] + "," + right_labels[i]
+        if left_labels[i] == right_labels[i]:
+            sim_labels.append([0.0,1.0])
+            sim_labels_num.append(1)
+        else:
+            sim_labels.append([1.0,0.0])
+            sim_labels_num.append(0)
+    return sim_labels, sim_labels_num
 
-    with open(infile, 'rb') as fh:
-        _, trees, labels = pickle.load(fh)
+def get_trees_from_pairs(all_pairs):
+
+    left_trees = []
+    right_trees = []
+    for pair in all_pairs:
+        left_trees.append(pair[0])
+        right_trees.append(pair[1])
+    
+    return left_trees, right_trees
+
+
+def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
+    """Train a classifier to label ASTs"""
+
+
+    n_classess = 2
+    left_algo_labels = ['mergesort', 'linkedlist', 'quicksort', 'bfs', 'bubblesort', 'knapsack']
+    right_algo_labels = ['mergesort', 'linkedlist', 'quicksort', 'bfs', 'bubblesort', 'knapsack']
+    # with open(left_inputs, 'rb') as fh:
+    #     _, left_trees, left_algo_labels = pickle.load(fh)
+
+
+    # with open(right_inputs, 'rb') as fh:
+    #     _, right_trees, right_algo_labels = pickle.load(fh)
+
+    with open(inputs, "rb") as fh:
+        testing_pairs = pickle.load(fh)
+
 
     with open(embedfile, 'rb') as fh:
         embeddings, embed_lookup = pickle.load(fh)
         num_feats = len(embeddings[0])
 
     # build the inputs and outputs of the network
-    nodes_node, children_node, hidden_node = network.init_net(
-        num_feats,
-        len(labels)
+    left_nodes_node, left_children_node, left_pooling_node = network.init_net_for_siamese(
+        num_feats
     )
+
+    right_nodes_node, right_children_node, right_pooling_node = network.init_net_for_siamese(
+        num_feats
+    )
+
+    merge_node = tf.concat([left_pooling_node, right_pooling_node], -1)
+
+
+    hidden_node = network.hidden_layer(merge_node, 200, 200)
+    hidden_node = tf.layers.dropout(hidden_node, rate=0.2, training=False)
+
+    hidden_node = network.hidden_layer(hidden_node, 200, 200)
+    hidden_node = tf.layers.dropout(hidden_node, rate=0.2, training=False)
+
+    hidden_node = network.hidden_layer(hidden_node, 200, n_classess)
+
+
     out_node = network.out_layer(hidden_node)
+
+    labels_node, loss_node = network.loss_layer(hidden_node, n_classess)
+
+    optimizer = tf.train.AdamOptimizer(LEARN_RATE)
+    train_step = optimizer.minimize(loss_node)
+
+    # tf.summary.scalar('loss', loss_node)
 
     ### init the graph
     sess = tf.Session()#config=tf.ConfigProto(device_count={'GPU':0}))
@@ -39,36 +97,49 @@ def test_model(logdir, infile, embedfile):
         else:
             raise 'Checkpoint not found.'
 
+    checkfile = os.path.join(logdir, 'cnn_tree.ckpt')
+    steps = 0
+
+    left_trees, right_trees = get_trees_from_pairs(testing_pairs)
+
     correct_labels = []
-    # make predicitons from the input
     predictions = []
-    step = 0
-    for batch in sampling.batch_samples(
-        sampling.gen_samples(trees, labels, embeddings, embed_lookup), 1
-    ):
-        nodes, children, batch_labels = batch
+    print('Computing training accuracy...')
+    for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(left_trees, left_algo_labels, right_trees, right_algo_labels, embeddings, embed_lookup, TEST_BATCH_SIZE):
+        left_nodes, left_children, left_labels_one_hot, left_labels = left_gen_batch
+
+        right_nodes, right_children, right_labels_one_hot, right_labels = right_gen_batch
+        sim_labels, _ = get_one_hot_similarity_label(left_labels,right_labels)
+           
         output = sess.run([out_node],
             feed_dict={
-                nodes_node: nodes,
-                children_node: children,
+                left_nodes_node: left_nodes,
+                left_children_node: left_children,
+                right_nodes_node: right_nodes,
+                right_children_node: right_children,
+                labels_node: sim_labels
             }
         )
-        correct_labels.append(np.argmax(batch_labels))
-        predictions.append(np.argmax(output))
-        step += 1
-        print(step, '/', len(trees))
+        print('Out:', output)
+        correct_labels.append(np.argmax(sim_labels[0]))
+        predictions.append(np.argmax(output[0]))
 
-    target_names = list(labels)
+    target_names = ["0","1"]
     print('Accuracy:', accuracy_score(correct_labels, predictions))
     print(classification_report(correct_labels, predictions, target_names=target_names))
     print(confusion_matrix(correct_labels, predictions))
 
-
+   
 def main():
-    logdir = "/model"
-    inputs = sys.argv[1]
-    embeddings = sys.argv[2]
-    test_model(logdir,inputs,embeddings) 
+
+    # example params : 
+        # argv[1] = ./bi-tbcnn/bi-tbcnn/logs/1
+        # argv[2] = ./sample_pickle_data/4000_training_pairs.pkl
+        # argv[3] = ./sample_pickle_data/fast_pretrained_vectors.pkl
+        
+    train_model(sys.argv[1],sys.argv[2],sys.argv[3])
+
+
 
 if __name__ == "__main__":
     main()
