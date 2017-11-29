@@ -67,10 +67,10 @@ def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
     merge_node = tf.concat([left_pooling_node, right_pooling_node], -1)
 
     hidden_node = network.hidden_layer(merge_node, 200, 200)
-    hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=True)
+    # hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=False)
 
     hidden_node = network.hidden_layer(hidden_node, 200, 200)
-    hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=True)
+    # hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=False)
 
     hidden_node = network.hidden_layer(hidden_node, 200, n_classess)
 
@@ -108,7 +108,7 @@ def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
         sample_0_pairs = random.sample(all_0_pairs,1000)
         shuffle_left_trees, shuffle_right_trees = get_trees_from_pairs(sample_1_pairs,sample_0_pairs)
         print("Left left:",len(shuffle_left_trees),"Len right:",len(shuffle_right_trees))
-        for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(shuffle_left_trees, left_algo_labels, shuffle_right_trees, right_algo_labels, embeddings, embed_lookup, BATCH_SIZE):
+        for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(shuffle_left_trees, left_algo_labels, shuffle_right_trees, right_algo_labels, embeddings, embeddings, BATCH_SIZE):
             
             left_nodes, left_children, left_labels_one_hot, left_labels = left_gen_batch
 

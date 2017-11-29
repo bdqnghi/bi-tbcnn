@@ -76,7 +76,7 @@ def generate_zero_pairwise(source,targets):
     random.shuffle(right_data)
     return left_data[0:len(left_data)/5],right_data[0:len(right_data)/5]
 
-def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_labels, vectors, vector_lookup, batch_size):
+def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_labels, left_vectors, left_vector_lookup, right_vectors, right_vector_lookup, using_vector_lookup_left, using_vector_lookup_right, batch_size):
     """Creates a generator that returns a tree in BFS order with each node
     replaced by its vector embedding, and a child lookup table."""
 
@@ -89,9 +89,7 @@ def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_lab
     batch_left_nodes, batch_left_children, batch_left_labels_one_hot, batch_left_labels = [], [], [], []
 
     batch_right_nodes, batch_right_children, batch_right_labels_one_hot, batch_right_labels = [], [], [], []
-
     samples = 0
-
 
     labels = []
     for i in range(0,len(left_trees)):
@@ -111,9 +109,14 @@ def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_lab
             left_queue.extend([(child, node_ind) for child in node['children']])  
             left_children.append([])    
             if parent_ind > -1:
-                left_children[parent_ind].append(node_ind)      
-            node_index = int(node['node'])
-            left_nodes.append(vectors[node_index])
+                left_children[parent_ind].append(node_ind)  
+            
+            if using_vector_lookup_left == True:
+            # node_index = int(node['node'])
+                node_index = left_vector_lookup[node["node"]]
+            else:
+                node_index = int(node['node'])
+            left_nodes.append(left_vectors[node_index])
       
 
         batch_left_nodes.append(left_nodes)
@@ -139,7 +142,7 @@ def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_lab
             if parent_ind > -1:
                 right_children[parent_ind].append(node_ind)      
             node_index = int(node['node'])
-            right_nodes.append(vectors[node_index])
+            right_nodes.append(right_vectors[node_index])
       
 
         batch_right_nodes.append(right_nodes)
