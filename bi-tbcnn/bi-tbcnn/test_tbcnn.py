@@ -3,7 +3,7 @@ import logging
 import pickle
 import tensorflow as tf
 import numpy as np
-import networks as network
+import network as network
 import sampling as sampling
 from parameters import LEARN_RATE, EPOCHS, CHECKPOINT_EVERY, TEST_BATCH_SIZE, DROP_OUT
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
@@ -33,7 +33,7 @@ def get_trees_from_pairs(all_pairs):
     return left_trees, right_trees
 
 
-def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
+def test_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS):
     """Train a classifier to label ASTs"""
 
 
@@ -46,14 +46,17 @@ def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
 
     # with open(right_inputs, 'rb') as fh:
     #     _, right_trees, right_algo_labels = pickle.load(fh)
-
     with open(inputs, "rb") as fh:
         testing_pairs = pickle.load(fh)
+    print "Loading embdding vectors...."
+    with open(left_embedfile, 'rb') as fh:
+        left_embeddings, left_embed_lookup = pickle.load(fh)
+        
+    with open(right_embedfile, 'rb') as fh:
+        right_embeddings, right_embed_lookup = pickle.load(fh)
 
+    num_feats = len(left_embeddings[0])
 
-    with open(embedfile, 'rb') as fh:
-        embeddings, embed_lookup = pickle.load(fh)
-        num_feats = len(embeddings[0])
 
     # build the inputs and outputs of the network
     left_nodes_node, left_children_node, left_pooling_node = network.init_net_for_siamese(
@@ -105,7 +108,7 @@ def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
     correct_labels = []
     predictions = []
     print('Computing training accuracy...')
-    for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(left_trees, left_algo_labels, right_trees, right_algo_labels, embeddings, embed_lookup, TEST_BATCH_SIZE):
+    for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(left_trees, left_algo_labels, right_trees, right_algo_labels, left_embeddings, left_embed_lookup, right_embeddings, right_embed_lookup, True, False, TEST_BATCH_SIZE):
         left_nodes, left_children, left_labels_one_hot, left_labels = left_gen_batch
 
         right_nodes, right_children, right_labels_one_hot, right_labels = right_gen_batch
@@ -132,12 +135,12 @@ def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
    
 def main():
 
-    # example params : 
+     # example params : 
         # argv[1] = ./bi-tbcnn/bi-tbcnn/logs/1
-        # argv[2] = ./sample_pickle_data/4000_training_pairs.pkl
-        # argv[3] = ./sample_pickle_data/fast_pretrained_vectors.pkl
-        
-    train_model(sys.argv[1],sys.argv[2],sys.argv[3])
+        # argv[2] = ./sample_pickle_data/all_training_pairs.pkl
+        # argv[3] = ./sample_pickle_data/python_pretrained_vectors.pkl
+        # argv[4] = ./sample_pickle_data/fast_pretrained_vectors.pkl
+    test_model(sys.argv[1],sys.argv[2],sys.argv[3], sys.argv[4])
 
 
 

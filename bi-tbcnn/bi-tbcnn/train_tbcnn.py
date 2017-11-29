@@ -1,3 +1,4 @@
+# This file is just another version to test with 2 different AST tree on each side of the Bi-TBCNN
 import os
 import logging
 import pickle
@@ -34,8 +35,8 @@ def get_trees_from_pairs(label_1_pairs,labeL_0_pairs):
     return left_trees, right_trees
 
 
-def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
-    print "Preparing to train model....."
+def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS):
+
     n_classess = 2
     left_algo_labels = ['mergesort', 'linkedlist', 'quicksort', 'bfs', 'bubblesort', 'knapsack']
     right_algo_labels = ['mergesort', 'linkedlist', 'quicksort', 'bfs', 'bubblesort', 'knapsack']
@@ -45,15 +46,19 @@ def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
 
     # with open(right_inputs, 'rb') as fh:
     #     right_trees, _, right_algo_labels = pickle.load(fh)
-
     print "Loading training data...."
     with open(inputs, "rb") as fh:
         all_1_pairs, all_0_pairs = pickle.load(fh)
 
+
     print "Loading embdding vectors...."
-    with open(embedfile, 'rb') as fh:
-        embeddings, embed_lookup = pickle.load(fh)
-        num_feats = len(embeddings[0])
+    with open(left_embedfile, 'rb') as fh:
+        left_embeddings, left_embed_lookup = pickle.load(fh)
+        
+    with open(right_embedfile, 'rb') as fh:
+        right_embeddings, right_embed_lookup = pickle.load(fh)
+
+    num_feats = len(left_embeddings[0])
 
     # build the inputs and outputs of the network
     left_nodes_node, left_children_node, left_pooling_node = network.init_net_for_siamese(
@@ -67,10 +72,10 @@ def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
     merge_node = tf.concat([left_pooling_node, right_pooling_node], -1)
 
     hidden_node = network.hidden_layer(merge_node, 200, 200)
-    # hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=False)
+    # hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=True)
 
     hidden_node = network.hidden_layer(hidden_node, 200, 200)
-    # hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=False)
+    # hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=True)
 
     hidden_node = network.hidden_layer(hidden_node, 200, n_classess)
 
@@ -108,7 +113,7 @@ def train_model(logdir, inputs, embedfile, epochs=EPOCHS):
         sample_0_pairs = random.sample(all_0_pairs,1000)
         shuffle_left_trees, shuffle_right_trees = get_trees_from_pairs(sample_1_pairs,sample_0_pairs)
         print("Left left:",len(shuffle_left_trees),"Len right:",len(shuffle_right_trees))
-        for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(shuffle_left_trees, left_algo_labels, shuffle_right_trees, right_algo_labels, embeddings, embeddings, BATCH_SIZE):
+        for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(shuffle_left_trees, left_algo_labels, shuffle_right_trees, right_algo_labels, left_embeddings, left_embed_lookup, right_embeddings, right_embed_lookup, True, False, BATCH_SIZE):
             
             left_nodes, left_children, left_labels_one_hot, left_labels = left_gen_batch
 
@@ -143,8 +148,9 @@ def main():
     # example params : 
         # argv[1] = ./bi-tbcnn/bi-tbcnn/logs/1
         # argv[2] = ./sample_pickle_data/all_training_pairs.pkl
-        # argv[3] = ./sample_pickle_data/fast_pretrained_vectors.pkl
-    train_model(sys.argv[1],sys.argv[2],sys.argv[3])
+        # argv[3] = ./sample_pickle_data/python_pretrained_vectors.pkl
+        # argv[4] = ./sample_pickle_data/fast_pretrained_vectors.pkl
+    train_model(sys.argv[1],sys.argv[2],sys.argv[3], sys.argv[4])
     
 
 
