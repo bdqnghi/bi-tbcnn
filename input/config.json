@@ -1,4 +1,5 @@
 {
     "GITHUB_USERNAME": "f-ast",
-    "GITHUB_ACCESS_TOKEN": "aca6f5f499461e331371282f273d587084372475"
+    "GITHUB_ACCESS_TOKEN": "aca6f5f499461e331371282f273d587084372475",
+    "using_vector_lookup_left": "false"
 }

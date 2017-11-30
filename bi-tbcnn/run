@@ -1,5 +1,5 @@
 #!/bin/bash
 cat /input/language.name | while read language ext; do
-	python /bi-tbcnn/bi-tbcnn/train_tbcnn.py /vec/fast_algorithms_trees_$language.pkl /vec/fast_pretrained_vectors_$language.pkl
-	python /bi-tbcnn/bi-tbcnn/test_tbcnn.py /vec/fast_algorithms_trees_$language.pkl /vec/fast_pretrained_vectors_$language.pkl
+	python /bi-tbcnn/bi-tbcnn/train_tbcnn.py /vec/fast_algorithms_trees_$language.pkl /vec/fast_pretrained_vectors_cpp.pkl /vec/fast_pretrained_vectors_java.pkl
+	python /bi-tbcnn/bi-tbcnn/test_tbcnn.py /vec/fast_algorithms_trees_$language.pkl /vec/fast_pretrained_vectors_cpp.pkl /vec/fast_pretrained_vectors_java.pkl
 done

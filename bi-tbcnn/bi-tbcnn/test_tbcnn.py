@@ -8,6 +8,7 @@ import sampling as sampling
 from parameters import LEARN_RATE, EPOCHS, CHECKPOINT_EVERY, TEST_BATCH_SIZE, DROP_OUT
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import sys
+import json
 
 def get_one_hot_similarity_label(left_labels, right_labels):
     sim_labels = []
@@ -105,10 +106,16 @@ def test_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS):
 
     left_trees, right_trees = get_trees_from_pairs(testing_pairs)
 
+    using_vector_lookup_left = True
+    if os.path.isfile("/input/config.json"):
+	    file_handler = open(config_file, 'r')
+	    contents = json.load(file_handler)
+	    using_vector_lookup_left = contents['using_vector_lookup_left'] == "false"
+
     correct_labels = []
     predictions = []
     print('Computing training accuracy...')
-    for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(left_trees, left_algo_labels, right_trees, right_algo_labels, left_embeddings, left_embed_lookup, right_embeddings, right_embed_lookup, True, False, TEST_BATCH_SIZE):
+    for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(left_trees, left_algo_labels, right_trees, right_algo_labels, left_embeddings, left_embed_lookup, right_embeddings, right_embed_lookup, using_vector_lookup_left, False, TEST_BATCH_SIZE):
         left_nodes, left_children, left_labels_one_hot, left_labels = left_gen_batch
 
         right_nodes, right_children, right_labels_one_hot, right_labels = right_gen_batch

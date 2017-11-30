@@ -10,6 +10,7 @@ from parameters import LEARN_RATE, EPOCHS, CHECKPOINT_EVERY, BATCH_SIZE, DROP_OU
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import random
 import sys
+import json
 def get_one_hot_similarity_label(left_labels, right_labels):
     sim_labels = []
     sim_labels_num = []
@@ -107,13 +108,20 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS):
     checkfile = os.path.join(logdir, 'cnn_tree.ckpt')
     steps = 0   
 
+    using_vector_lookup_left = True
+    if os.path.isfile("/input/config.json"):
+	    file_handler = open(config_file, 'r')
+	    contents = json.load(file_handler)
+	    using_vector_lookup_left = contents['using_vector_lookup_left'] == "false"
+
+
     print "Begin training...."
     for epoch in range(1, epochs+1):
         sample_1_pairs = random.sample(all_1_pairs,1000)
         sample_0_pairs = random.sample(all_0_pairs,1000)
         shuffle_left_trees, shuffle_right_trees = get_trees_from_pairs(sample_1_pairs,sample_0_pairs)
         print("Left left:",len(shuffle_left_trees),"Len right:",len(shuffle_right_trees))
-        for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(shuffle_left_trees, left_algo_labels, shuffle_right_trees, right_algo_labels, left_embeddings, left_embed_lookup, right_embeddings, right_embed_lookup, True, False, BATCH_SIZE):
+        for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(shuffle_left_trees, left_algo_labels, shuffle_right_trees, right_algo_labels, left_embeddings, left_embed_lookup, right_embeddings, right_embed_lookup, using_vector_lookup_left, False, BATCH_SIZE):
             
             left_nodes, left_children, left_labels_one_hot, left_labels = left_gen_batch
 
