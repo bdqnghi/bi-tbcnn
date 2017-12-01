@@ -9,7 +9,9 @@ if [ "\${src_file/.python/}" == "\${src_file}" ]; then
 	if [ ! -f \$pkl_file ]; then
 		pb_file=/ast/\$src_file.pb
 		if [ ! -f \$pb_file ]; then
-			fast \$src_file \$pb_file
+			fast -p \$src_file \$pb_file
+			fast -S \$pb_file \$pb_file.out > /dev/null
+			mv \$pb_file.out.slice.pb \$pb_file 
 		fi
 		fast \$pb_file \$pkl_file
 		rm -f \$pb_file

@@ -1,4 +1,4 @@
-FROM yijun/fast
+FROM yijun/fast:v0.0.7
 RUN apk add -U --no-cache parallel
 RUN apk add -U --no-cache bash
 RUN apk add -U --no-cache py2-pip
