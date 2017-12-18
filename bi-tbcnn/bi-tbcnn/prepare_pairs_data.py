@@ -14,7 +14,7 @@ with open(sys.argv[1], 'rb') as fh:
 	_, right_trees, right_algo_labels = pickle.load(fh)
 
 all_1_pairs, all_0_pairs = sampling.get_all_pairs_for_training(left_trees,right_trees)
-print "1 pairs:" + str(len(all_1_pairs)) + " 0 pairs:" + str(len(all_0_pairs))
+print("1 pairs:" + str(len(all_1_pairs)) + " 0 pairs:" + str(len(all_0_pairs)))
 
 random.shuffle(all_1_pairs)
 random.shuffle(all_0_pairs)
