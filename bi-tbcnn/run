@@ -1,6 +1,6 @@
 #!/bin/bash
-if [ ! -f /train/all_training_pairs.pkl ]; then
-	python /bi-tbcnn/bi-tbcnn/prepare_pairs_data.py /vec/fast_algorithms_trees_cpp.pkl /vec/fast_algorithms_trees_java.pkl /train/all_training_pairs.pkl 
+if [ ! -f /model/all_training_pairs.pkl ]; then
+	python /bi-tbcnn/bi-tbcnn/prepare_pairs_data.py /vec/fast_algorithms_trees_cpp.pkl /vec/fast_algorithms_trees_java.pkl /model/all_training_pairs.pkl 
 fi
-python /bi-tbcnn/bi-tbcnn/train_tbcnn.py /train /train/all_training_pairs.pkl /vec/fast_pretrained_vectors_cpp.pkl /vec/fast_pretrained_vectors_java.pkl
-python /bi-tbcnn/bi-tbcnn/test_tbcnn.py /train /train/all_training_pairs.pkl /vec/fast_pretrained_vectors_cpp.pkl /vec/fast_pretrained_vectors_java.pkl
+python /bi-tbcnn/bi-tbcnn/train_tbcnn.py /model /model/all_training_pairs.pkl /vec/fast_pretrained_vectors_cpp.pkl /vec/fast_pretrained_vectors_java.pkl
+python /bi-tbcnn/bi-tbcnn/test_tbcnn.py /model /model/all_training_pairs.pkl /vec/fast_pretrained_vectors_cpp.pkl /vec/fast_pretrained_vectors_java.pkl
