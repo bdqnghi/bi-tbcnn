@@ -10,6 +10,6 @@ cat /input/language.name | while read language ext; do
 		  fi
 		  python /bi-tbcnn/ast2vec/train.py /vec/fast_algorithms_nodes_$language.pkl /vec/fast_pretrained_vectors_$language.pkl
 	  fi
+	  python /bi-tbcnn/ast2vec/fast_pickle_file_to_training_trees.py /vec/fast_algorithms_$language.pkl /vec/fast_algorithms_trees_$language.pkl
   fi
-  python /bi-tbcnn/ast2vec/fast_pickle_file_to_training_trees.py /vec/fast_algorithms_$language.pkl /vec/fast_algorithms_trees_$language.pkl
 done
