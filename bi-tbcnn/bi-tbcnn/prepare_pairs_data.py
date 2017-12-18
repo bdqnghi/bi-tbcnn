@@ -5,7 +5,7 @@ import sys
 
 # "./data/cpp_algorithms_trees.pkl"
 with open(sys.argv[0], 'rb') as fh:
- 	# left_trees, _, left_algo_labels = pickle.load(fh)
+ 	#left_trees, _, left_algo_labels = pickle.load(fh)
  	_, left_trees, left_algo_labels = pickle.load(fh)
 
 #"./data/java_algorithms_trees.pkl"
