@@ -1,8 +1,8 @@
 #PBS -N my_project_1
 python=python2.7
-f=/home/u7376/mirror/github.com/bdqnghi/bi-tbcnn
-cd $f
-#f=.
+#f=/home/u7376/mirror/github.com/bdqnghi/bi-tbcnn
+#cd $f
+f=.
 echo Starting calculation
 if [ ! -d $f/vec ]; then
 	echo ast2vec

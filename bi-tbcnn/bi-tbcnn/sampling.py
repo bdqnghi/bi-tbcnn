@@ -36,9 +36,8 @@ def gen_samples(trees, labels, vectors, vector_lookup):
                 children[parent_ind].append(node_ind)
             
             n = str(node['node'])
-
-	    look_up_vector = vector_lookup[n]
-	    nodes.append(vectors[int(n)])
+            look_up_vector = vector_lookup[n]
+            nodes.append(vectors[int(n)])
         # print "children list length: " + str(len(children))
         yield (nodes, children, label)
 
@@ -59,7 +58,7 @@ def get_all_pairs_for_training(left_inputs,right_inputs):
                 all_1_pairs.append((left_tree,right_tree))
             else:
                 all_0_pairs.append((left_tree,right_tree))
-            print count
+            print(count)
             count += 1
     return all_1_pairs, all_0_pairs
 
@@ -173,7 +172,7 @@ def gen_fast_samples(trees, labels, vectors, vector_lookup):
     """Creates a generator that returns a tree in BFS order with each node
     replaced by its vector embedding, and a child lookup table."""
 
-    print "number of trees : "  + str(len(trees))
+    print("number of trees : "  + str(len(trees)))
     # encode labels as one-hot vectors
     label_lookup = {label: _onehot(i, len(labels)) for i, label in enumerate(labels)}
     # print vector_lookup
