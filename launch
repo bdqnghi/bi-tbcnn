@@ -1,22 +1,17 @@
 #PBS -N my_project_1
 python=python2.7
-if [ $(hostname) == "c009" ]; then
         f=/home/u7376/mirror/github.com/bdqnghi/bi-tbcnn
         cd $f
-else
-        f=.
-fi
 echo Starting calculation
-if [ ! -d $f/vec ]; then
-	echo ast2vec
-	mkdir -p $f/vec
-	for language in java cpp; do
-		$python ast2vec/ast2vec/fast_merge_pickles_to_pickle.py $f/ast java $f/vec/fast_algorithms_$language.pkl
-		$python ast2vec/ast2vec/fast_pickle_file_to_nodes.py $f/vec/fast_algorithms_$language.pkl $f/vec/fast_algorithms_nodes_$language.pkl
-		$python ast2vec/ast2vec/train.py $f/vec/fast_algorithms_nodes_$language.pkl $f/vec/fast_pretrained_vectors_$language.pkl
-		$python ast2vec/ast2vec/fast_pickle_file_to_training_trees.py $f/vec/fast_algorithms_$language.pkl $f/vec/fast_algorithms_trees_$language.pkl
-	done
-fi
+mkdir -p $f/vec
+for language in cpp java; do
+   if [ ! -f "$f/vec/fast_algorithms_trees_$language.pkl" ]; then
+	$python ast2vec/ast2vec/fast_merge_pickles_to_pickle.py $f/ast $language $f/vec/fast_algorithms_$language.pkl
+	$python ast2vec/ast2vec/fast_pickle_file_to_nodes.py $f/vec/fast_algorithms_$language.pkl $f/vec/fast_algorithms_nodes_$language.pkl
+	$python ast2vec/ast2vec/train.py $f/vec/fast_algorithms_nodes_$language.pkl $f/vec/fast_pretrained_vectors_$language.pkl
+	$python ast2vec/ast2vec/fast_pickle_file_to_training_trees.py $f/vec/fast_algorithms_$language.pkl $f/vec/fast_algorithms_trees_$language.pkl
+   fi
+done
 if [ ! -f $f/model/all_training_pairs.pkl ]; then
 	mkdir -p $f/model
 	python bi-tbcnn/bi-tbcnn/prepare_pairs_data.py $f/vec/fast_algorithms_trees_cpp.pkl $f/vec/fast_algorithms_trees_java.pkl $f/model/all_training_pairs.pkl 
