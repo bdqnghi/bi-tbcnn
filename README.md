@@ -2,7 +2,9 @@
 
 The project is an implementation of Bi-TBCNN introduced in our paper accepted by <a
 href="https://nl4se.github.io">the 1st Natural Languages for Software
-Engineering (NL4SE) workshop at AAAI'18 conference</a>. You can find the paper here: https://arxiv.org/abs/1710.06159
+Engineering (NL4SE) workshop at AAAI'18 conference</a>. 
+
+You can find the paper here: https://arxiv.org/abs/1710.06159
 
 We have prepared a fully automated workflow (Figure 1) for you to classify programs against known algorithm names.
 
