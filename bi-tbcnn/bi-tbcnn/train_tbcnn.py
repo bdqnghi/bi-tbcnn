@@ -69,30 +69,30 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS):
     right_nodes_node, right_children_node, right_pooling_node = network.init_net_for_siamese(
         num_feats
     )
+    with tf.device('/device:GPU:0'):
+        merge_node = tf.concat([left_pooling_node, right_pooling_node], -1)
 
-    merge_node = tf.concat([left_pooling_node, right_pooling_node], -1)
+        hidden_node = network.hidden_layer(merge_node, 200, 200)
+        # hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=True)
 
-    hidden_node = network.hidden_layer(merge_node, 200, 200)
-    # hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=True)
+        hidden_node = network.hidden_layer(hidden_node, 200, 200)
+        # hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=True)
 
-    hidden_node = network.hidden_layer(hidden_node, 200, 200)
-    # hidden_node = tf.layers.dropout(hidden_node, rate=DROP_OUT, training=True)
-
-    hidden_node = network.hidden_layer(hidden_node, 200, n_classess)
+        hidden_node = network.hidden_layer(hidden_node, 200, n_classess)
 
 
-    out_node = network.out_layer(hidden_node)
+        out_node = network.out_layer(hidden_node)
 
-    labels_node, loss_node = network.loss_layer(hidden_node, n_classess)
+        labels_node, loss_node = network.loss_layer(hidden_node, n_classess)
 
-    optimizer = tf.train.AdamOptimizer(LEARN_RATE)
-    train_step = optimizer.minimize(loss_node)
+        optimizer = tf.train.AdamOptimizer(LEARN_RATE)
+        train_step = optimizer.minimize(loss_node)
 
-    # tf.summary.scalar('loss', loss_node)
+        # tf.summary.scalar('loss', loss_node)
 
-    ### init the graph
-    sess = tf.Session()#config=tf.ConfigProto(device_count={'GPU':0}))
-    sess.run(tf.global_variables_initializer())
+        ### init the graph
+        sess = tf.Session()#config=tf.ConfigProto(device_count={'GPU':0}))
+        sess.run(tf.global_variables_initializer())
 
     with tf.name_scope('saver'):
         saver = tf.train.Saver()
@@ -114,42 +114,43 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS):
 	    contents = json.load(file_handler)
 	    using_vector_lookup_left = contents['using_vector_lookup_left'] == "false"
 
-
     print "Begin training...."
-    for epoch in range(1, epochs+1):
-        sample_1_pairs = random.sample(all_1_pairs,1000)
-        sample_0_pairs = random.sample(all_0_pairs,1000)
-        shuffle_left_trees, shuffle_right_trees = get_trees_from_pairs(sample_1_pairs,sample_0_pairs)
-        print("Left left:",len(shuffle_left_trees),"Len right:",len(shuffle_right_trees))
-        for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(shuffle_left_trees, left_algo_labels, shuffle_right_trees, right_algo_labels, left_embeddings, left_embed_lookup, right_embeddings, right_embed_lookup, using_vector_lookup_left, False, BATCH_SIZE):
-            
-            left_nodes, left_children, left_labels_one_hot, left_labels = left_gen_batch
 
-            right_nodes, right_children, right_labels_one_hot, right_labels = right_gen_batch
+    with tf.device('/device:GPU:0'):       
+        for epoch in range(1, epochs+1):
+            sample_1_pairs = random.sample(all_1_pairs,1000)
+            sample_0_pairs = random.sample(all_0_pairs,1000)
+            shuffle_left_trees, shuffle_right_trees = get_trees_from_pairs(sample_1_pairs,sample_0_pairs)
+            print("Left left:",len(shuffle_left_trees),"Len right:",len(shuffle_right_trees))
+            for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(shuffle_left_trees, left_algo_labels, shuffle_right_trees, right_algo_labels, left_embeddings, left_embed_lookup, right_embeddings, right_embed_lookup, using_vector_lookup_left, False, BATCH_SIZE):
+                
+                left_nodes, left_children, left_labels_one_hot, left_labels = left_gen_batch
 
-            sim_labels, sim_labels_num = get_one_hot_similarity_label(left_labels,right_labels)
-            _, err, out, merge, labs, left_pooling = sess.run(
-                [train_step, loss_node, out_node, merge_node, labels_node, left_pooling_node],
-                feed_dict={
-                    left_nodes_node: left_nodes,
-                    left_children_node: left_children,
-                    right_nodes_node: right_nodes,
-                    right_children_node: right_children,
-                    labels_node: sim_labels
-                }
-            )
-            # print "hidden : " + str(loss)
-            print('Epoch:', epoch,'Steps:', steps,'Loss:', err, "True Label:", labs, "Predicted Label:", out)
-         
+                right_nodes, right_children, right_labels_one_hot, right_labels = right_gen_batch
 
-            if steps % CHECKPOINT_EVERY == 0:
-                # save state so we can resume later
-                saver.save(sess, os.path.join(checkfile), steps)
-                print('Checkpoint saved.')
+                sim_labels, sim_labels_num = get_one_hot_similarity_label(left_labels,right_labels)
+                _, err, out, merge, labs, left_pooling = sess.run(
+                    [train_step, loss_node, out_node, merge_node, labels_node, left_pooling_node],
+                    feed_dict={
+                        left_nodes_node: left_nodes,
+                        left_children_node: left_children,
+                        right_nodes_node: right_nodes,
+                        right_children_node: right_children,
+                        labels_node: sim_labels
+                    }
+                )
+                # print "hidden : " + str(loss)
+                print('Epoch:', epoch,'Steps:', steps,'Loss:', err, "True Label:", labs, "Predicted Label:", out)
+             
 
-    
-            steps+=1
-        steps = 0
+                if steps % CHECKPOINT_EVERY == 0:
+                    # save state so we can resume later
+                    saver.save(sess, os.path.join(checkfile), steps)
+                    print('Checkpoint saved.')
+
+        
+                steps+=1
+            steps = 0
    
 def main():
         

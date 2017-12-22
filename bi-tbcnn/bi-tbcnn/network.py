@@ -251,10 +251,6 @@ def hidden_layer(pooled, input_size, output_size):
         #init = tf.zeros([output_size,])
         biases = tf.Variable(init, name='biases')
 
-        with tf.name_scope('summaries'):
-            tf.summary.histogram('weights', [weights])
-            tf.summary.histogram('biases', [biases])
-
         # return tf.nn.lrelu(tf.matmul(pooled, weights) + biases)
         return lrelu(tf.matmul(pooled, weights) + biases, 0.01)
 
