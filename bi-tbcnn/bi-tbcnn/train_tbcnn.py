@@ -90,6 +90,9 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS):
 
         # tf.summary.scalar('loss', loss_node)
 
+        correct_prediction = tf.equal(tf.argmax(out_node,1), tf.argmax(labels_node,1))
+        accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+
         ### init the graph
         sess = tf.Session()#config=tf.ConfigProto(device_count={'GPU':0}))
         sess.run(tf.global_variables_initializer())
@@ -139,6 +142,7 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS):
                         labels_node: sim_labels
                     }
                 )
+
                 # print "hidden : " + str(loss)
                 print('Epoch:', epoch,'Steps:', steps,'Loss:', err, "True Label:", labs, "Predicted Label:", out)
              
