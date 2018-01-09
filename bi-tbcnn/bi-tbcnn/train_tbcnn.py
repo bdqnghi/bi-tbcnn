@@ -12,7 +12,7 @@ import random
 import sys
 import json
 
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
 #os.environ['CUDA_VISIBLE_DEVICES'] = "-1"
 
 # device = "/cpu:0"
@@ -47,7 +47,9 @@ def generate_random_batch(iterable,size):
         yield iterable[ndx:min(ndx + n, l)]
 
 
-def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, with_drop_out=1):
+def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, with_drop_out=1,device="-1"):
+    os.environ['CUDA_VISIBLE_DEVICES'] = device
+    
     if int(with_drop_out) == 1:
         print("Training with drop out rate : " + str(DROP_OUT))
     n_classess = 2
@@ -194,7 +196,7 @@ def main():
         # argv[3] = ./sample_pickle_data/python_pretrained_vectors.pkl
         # argv[4] = ./sample_pickle_data/fast_pretrained_vectors.pkl
         # argv[5] = 1
-    train_model(sys.argv[1],sys.argv[2],sys.argv[3], sys.argv[4],EPOCHS, sys.argv[5])
+    train_model(sys.argv[1],sys.argv[2],sys.argv[3], sys.argv[4],EPOCHS, sys.argv[5],sys.argv[6])
     
 
 
