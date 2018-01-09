@@ -12,8 +12,8 @@ import random
 import sys
 import json
 
-os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
-
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
+#os.environ['CUDA_VISIBLE_DEVICES'] = "-1"
 
 # device = "/cpu:0"
 # device = "/device:GPU:0"
@@ -21,7 +21,7 @@ def get_one_hot_similarity_label(left_labels, right_labels):
     sim_labels = []
     sim_labels_num = []
     for i in range(0,len(left_labels)):
-        print left_labels[i] + "," + right_labels[i]
+        #print left_labels[i] + "," + right_labels[i]
         if left_labels[i] == right_labels[i]:    
             sim_labels.append([0.0,1.0])
             sim_labels_num.append(1)
@@ -49,7 +49,7 @@ def generate_random_batch(iterable,size):
 
 def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, with_drop_out=1):
     if int(with_drop_out) == 1:
-        print "Training with drop out rate : " + str(DROP_OUT)
+        print("Training with drop out rate : " + str(DROP_OUT))
     n_classess = 2
     left_algo_labels = ["bfs","bubblesort","knapsack","linkedlist","mergesort","quicksort","heap","dfs","stack","queue"]
     right_algo_labels = ["bfs","bubblesort","knapsack","linkedlist","mergesort","quicksort","heap","dfs","stack","queue"]
@@ -59,7 +59,7 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, 
 
     # with open(right_inputs, 'rb') as fh:
     #     right_trees, _, right_algo_labels = pickle.load(fh)
-    print "Loading training data...."
+    print("Loading training data....")
     # print "Using device : " + device
     with open(inputs, "rb") as fh:
         all_1_pairs, all_0_pairs = pickle.load(fh)
@@ -68,7 +68,7 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, 
     # random.shuffle(all_1_pairs)
     # random.shuffle(all_0_pairs)
 
-    print "Loading embdding vectors...."
+    print("Loading embdding vectors....")
     with open(left_embedfile, 'rb') as fh:
         left_embeddings, left_embed_lookup = pickle.load(fh)
         
@@ -130,7 +130,7 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, 
         writer = tf.summary.FileWriter(logdir, sess.graph)
         ckpt = tf.train.get_checkpoint_state(logdir)
         if ckpt and ckpt.model_checkpoint_path:
-            print "Continue training with old model"
+            print("Continue training with old model")
             saver.restore(sess, ckpt.model_checkpoint_path)
         # else:
         #     raise 'Checkpoint not found.'
@@ -144,7 +144,7 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, 
         contents = json.load(file_handler)
         using_vector_lookup_left = contents['using_vector_lookup_left'] == "false"
 
-    print "Begin training...."
+    print("Begin training....")
 
     # with tf.device(device):
     for epoch in range(1, epochs+1):
@@ -159,7 +159,7 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, 
             right_nodes, right_children, right_labels_one_hot, right_labels = right_gen_batch
 
             sim_labels, sim_labels_num = get_one_hot_similarity_label(left_labels,right_labels)
-            print sim_labels
+            print(sim_labels)
 
                 
             _, err, out, merge, labs, left_pooling = sess.run(
