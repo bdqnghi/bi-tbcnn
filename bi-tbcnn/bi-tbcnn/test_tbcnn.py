@@ -10,6 +10,8 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 import sys
 import json
 
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+
 def get_one_hot_similarity_label(left_labels, right_labels):
     sim_labels = []
     sim_labels_num = []
@@ -39,8 +41,10 @@ def test_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS):
 
 
     n_classess = 2
-    left_algo_labels = ['mergesort', 'linkedlist', 'quicksort', 'bfs', 'bubblesort', 'knapsack']
-    right_algo_labels = ['mergesort', 'linkedlist', 'quicksort', 'bfs', 'bubblesort', 'knapsack']
+    # left_algo_labels = ['mergesort', 'linkedlist', 'quicksort', 'bfs', 'bubblesort', 'knapsack']
+    # right_algo_labels = ['mergesort', 'linkedlist', 'quicksort', 'bfs', 'bubblesort', 'knapsack']
+    left_algo_labels = ["bfs","bubblesort","knapsack","linkedlist","mergesort","quicksort","heap","dfs","stack","queue"]
+    right_algo_labels = ["bfs","bubblesort","knapsack","linkedlist","mergesort","quicksort","heap","dfs","stack","queue"]
     # with open(left_inputs, 'rb') as fh:
     #     _, left_trees, left_algo_labels = pickle.load(fh)
 
@@ -72,10 +76,10 @@ def test_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS):
 
 
     hidden_node = network.hidden_layer(merge_node, 200, 200)
-    hidden_node = tf.layers.dropout(hidden_node, rate=0.2, training=False)
+    # hidden_node = tf.layers.dropout(hidden_node, rate=0.2, training=False)
 
     hidden_node = network.hidden_layer(hidden_node, 200, 200)
-    hidden_node = tf.layers.dropout(hidden_node, rate=0.2, training=False)
+    # hidden_node = tf.layers.dropout(hidden_node, rate=0.2, training=False)
 
     hidden_node = network.hidden_layer(hidden_node, 200, n_classess)
 
@@ -106,7 +110,7 @@ def test_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS):
 
     left_trees, right_trees = get_trees_from_pairs(testing_pairs)
 
-    using_vector_lookup_left = True
+    using_vector_lookup_left = False
     if os.path.isfile("/input/config.json"):
 	    file_handler = open(config_file, 'r')
 	    contents = json.load(file_handler)
@@ -114,7 +118,7 @@ def test_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS):
 
     correct_labels = []
     predictions = []
-    print('Computing training accuracy...')
+    print('Computing testing accuracy...')
     for left_gen_batch, right_gen_batch in sampling.batch_random_samples_2_sides(left_trees, left_algo_labels, right_trees, right_algo_labels, left_embeddings, left_embed_lookup, right_embeddings, right_embed_lookup, using_vector_lookup_left, False, TEST_BATCH_SIZE):
         left_nodes, left_children, left_labels_one_hot, left_labels = left_gen_batch
 
