@@ -11,6 +11,7 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 import random
 import sys
 import json
+import argparse
 
 # os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
 #os.environ['CUDA_VISIBLE_DEVICES'] = "-1"
@@ -51,7 +52,7 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, 
     os.environ['CUDA_VISIBLE_DEVICES'] = device
     
     print("Using device : " + device)
-    
+
     if int(with_drop_out) == 1:
         print("Training with drop out rate : " + str(DROP_OUT))
     n_classess = 2
@@ -125,10 +126,12 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, 
     # config = tf.ConfigProto(allow_soft_placement=True)
     # config.gpu_options.allocator_type = 'BFC'
     # config.gpu_options.per_process_gpu_memory_fraction = 0.9
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
 
-    # sess = tf.Session(config = config)
+    sess = tf.Session(config = config)
 
-    sess = tf.Session()
+    # sess = tf.Session()
     sess.run(tf.global_variables_initializer())
 
     with tf.name_scope('saver'):
