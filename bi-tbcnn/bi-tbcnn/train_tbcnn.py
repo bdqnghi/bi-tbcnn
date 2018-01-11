@@ -56,11 +56,11 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, 
     if int(with_drop_out) == 1:
         print("Training with drop out rate : " + str(DROP_OUT))
     n_classess = 2
-    # left_algo_labels = ["bfs","bubblesort","knapsack","linkedlist","mergesort","quicksort","heap","dfs","stack","queue"]
-    # right_algo_labels = ["bfs","bubblesort","knapsack","linkedlist","mergesort","quicksort","heap","dfs","stack","queue"]
+    left_algo_labels = ["bfs","bubblesort","knapsack","linkedlist","mergesort","quicksort","heap","dfs","stack","queue"]
+    right_algo_labels = ["bfs","bubblesort","knapsack","linkedlist","mergesort","quicksort","heap","dfs","stack","queue"]
 
-    left_algo_labels = ["bfs","bubblesort","knapsack","linkedlist","mergesort","quicksort"]
-    right_algo_labels = ["bfs","bubblesort","knapsack","linkedlist","mergesort","quicksort"]
+    # left_algo_labels = ["bfs","bubblesort","knapsack","linkedlist","mergesort","quicksort"]
+    # right_algo_labels = ["bfs","bubblesort","knapsack","linkedlist","mergesort","quicksort"]
     # with open(left_inputs, 'rb') as fh:
     #     left_trees, _, left_algo_labels = pickle.load(fh)
 
