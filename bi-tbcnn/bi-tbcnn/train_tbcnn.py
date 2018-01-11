@@ -126,8 +126,15 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, 
     # config = tf.ConfigProto(allow_soft_placement=True)
     # config.gpu_options.allocator_type = 'BFC'
     # config.gpu_options.per_process_gpu_memory_fraction = 0.9
+    # config = tf.ConfigProto()
+    # config.gpu_options.allow_growth = True
+
+  
     config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
+    config.gpu_options.allocator_type ='BFC'
+    # config.gpu_options.allow_growth = True
+    config.gpu_options.per_process_gpu_memory_fraction = 0.98
+
 
     sess = tf.Session(config = config)
 
