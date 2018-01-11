@@ -50,6 +50,8 @@ def generate_random_batch(iterable,size):
 def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, with_drop_out=1,device="-1"):
     os.environ['CUDA_VISIBLE_DEVICES'] = device
     
+    print("Using device : " + device)
+    
     if int(with_drop_out) == 1:
         print("Training with drop out rate : " + str(DROP_OUT))
     n_classess = 2
