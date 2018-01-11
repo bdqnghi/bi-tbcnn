@@ -16,6 +16,7 @@ def get_one_hot_similarity_label(left_labels, right_labels):
     sim_labels = []
     sim_labels_num = []
     for i in range(0,len(left_labels)):
+        print "---------------------------------"
         print left_labels[i] + "," + right_labels[i]
         if left_labels[i] == right_labels[i]:
             sim_labels.append([0.0,1.0])
@@ -134,7 +135,10 @@ def test_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS):
                 labels_node: sim_labels
             }
         )
-        print('Out:', output)
+        correct = np.argmax(sim_labels[0])
+        predicted = np.argmax(output[0])
+        check = (correct == predicted) and True or False
+        print('Out:', output, "Status:", check)
         correct_labels.append(np.argmax(sim_labels[0]))
         predictions.append(np.argmax(output[0]))
 
