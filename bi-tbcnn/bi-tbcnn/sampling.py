@@ -103,14 +103,7 @@ def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_lab
             else:
                 node_index = int(node['node'])
             left_nodes.append(left_vectors[node_index])
-      
-
-        batch_left_nodes.append(left_nodes)
-        batch_left_children.append(left_children)
-        batch_left_labels_one_hot.append(left_label_one_hot)
-        batch_left_labels.append(left_label)
         
-
 
         right_tree = right_trees[i]
 
@@ -131,6 +124,11 @@ def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_lab
             right_nodes.append(right_vectors[node_index])
         
         if len(right_children) < 9000 and len(left_children) < 9000:
+
+            batch_left_nodes.append(left_nodes)
+            batch_left_children.append(left_children)
+            batch_left_labels_one_hot.append(left_label_one_hot)
+            batch_left_labels.append(left_label)
 
             batch_right_nodes.append(right_nodes)
             batch_right_children.append(right_children)
