@@ -52,7 +52,7 @@ def train_model(logdir, inputs, left_embedfile, right_embedfile, epochs=EPOCHS, 
     os.environ['CUDA_VISIBLE_DEVICES'] = device
     
     print("Using device : " + device)
-
+    print("Batch size : " + str(BATCH_SIZE))
     if int(with_drop_out) == 1:
         print("Training with drop out rate : " + str(DROP_OUT))
     n_classess = 2
