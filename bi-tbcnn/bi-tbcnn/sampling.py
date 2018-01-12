@@ -140,13 +140,13 @@ def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_lab
             samples += 1
 
         
-            if samples >= batch_size:
-                yield _pad_batch_siamese_2_side(batch_left_nodes, batch_left_children,batch_left_labels_one_hot, batch_left_labels, batch_right_nodes, batch_right_children,batch_right_labels_one_hot, batch_right_labels)
-                batch_left_nodes, batch_left_children, batch_left_labels_one_hot, batch_left_labels = [], [], [], []
+        if samples >= batch_size:
+            yield _pad_batch_siamese_2_side(batch_left_nodes, batch_left_children,batch_left_labels_one_hot, batch_left_labels, batch_right_nodes, batch_right_children,batch_right_labels_one_hot, batch_right_labels)
+            batch_left_nodes, batch_left_children, batch_left_labels_one_hot, batch_left_labels = [], [], [], []
 
-                batch_right_nodes, batch_right_children, batch_right_labels_one_hot, batch_right_labels = [], [], [], []
+            batch_right_nodes, batch_right_children, batch_right_labels_one_hot, batch_right_labels = [], [], [], []
 
-                samples = 0
+            samples = 0
 
     if batch_left_nodes and batch_right_labels:
         yield _pad_batch_siamese_2_side(batch_left_nodes, batch_left_children,batch_left_labels_one_hot, batch_left_labels, batch_right_nodes, batch_right_children,batch_right_labels_one_hot, batch_right_labels)
