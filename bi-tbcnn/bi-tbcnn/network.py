@@ -35,18 +35,22 @@ def conv_layer(num_conv, output_size, nodes, children, feature_size):
 def conv_node(nodes, children, feature_size, output_size):
     """Perform convolutions over every batch sample."""
     with tf.name_scope('conv_node'):
-        initializer = tf.contrib.layers.xavier_initializer()
         std = 1.0 / math.sqrt(feature_size)
         w_t, w_l, w_r = (
-            tf.Variable(initializer([feature_size, output_size]), name='Wt'),
-            tf.Variable(initializer([feature_size, output_size]), name='Wl'),
-            tf.Variable(initializer([feature_size, output_size]), name='Wr'),
+            tf.Variable(tf.truncated_normal([feature_size, output_size], stddev=std), name='Wt'),
+            tf.Variable(tf.truncated_normal([feature_size, output_size], stddev=std), name='Wl'),
+            tf.Variable(tf.truncated_normal([feature_size, output_size], stddev=std), name='Wr'),
         )
-        # init = tf.truncated_normal([output_size,], stddev=math.sqrt(2.0/feature_size))
+        init = tf.truncated_normal([output_size,], stddev=math.sqrt(2.0/feature_size))
         #init = tf.zeros([output_size,])
-        b_conv = tf.Variable(initializer([output_size,]), name='b_conv')
+        b_conv = tf.Variable(init, name='b_conv')
 
-       
+        with tf.name_scope('summaries'):
+            tf.summary.histogram('w_t', [w_t])
+            tf.summary.histogram('w_l', [w_l])
+            tf.summary.histogram('w_r', [w_r])
+            tf.summary.histogram('b_conv', [b_conv])
+
         return conv_step(nodes, children, feature_size, w_t, w_r, w_l, b_conv)
 
 def conv_step(nodes, children, feature_size, w_t, w_r, w_l, b_conv):
@@ -236,12 +240,16 @@ def lrelu(x, alpha):
 def hidden_layer(pooled, input_size, output_size):
     """Create a hidden feedforward layer."""
     with tf.name_scope("hidden"):
-        initializer = tf.contrib.layers.xavier_initializer()
-        weights = tf.Variable(initializer([input_size, output_size]),name='weights')
+        weights = tf.Variable(
+            tf.truncated_normal(
+                [input_size, output_size], stddev=1.0 / math.sqrt(input_size)
+            ),
+            name='weights'
+        )
 
-        # init = tf.truncated_normal([output_size,], stddev=math.sqrt(2.0/input_size))
+        init = tf.truncated_normal([output_size,], stddev=math.sqrt(2.0/input_size))
         #init = tf.zeros([output_size,])
-        biases = tf.Variable(initializer([output_size,]), name='biases')
+        biases = tf.Variable(init, name='biases')
 
         # return tf.nn.lrelu(tf.matmul(pooled, weights) + biases)
         return lrelu(tf.matmul(pooled, weights) + biases, 0.01)
