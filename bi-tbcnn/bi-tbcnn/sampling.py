@@ -129,30 +129,24 @@ def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_lab
                 right_children[parent_ind].append(node_ind)      
             node_index = int(node['node'])
             right_nodes.append(right_vectors[node_index])
-      
-
-        batch_right_nodes.append(right_nodes)
-        batch_right_children.append(right_children)
-        batch_right_labels_one_hot.append(right_label_one_hot)
-        batch_right_labels.append(right_label)
         
+        if len(right_children) < 9000 and len(left_children) < 9000:
 
+            batch_right_nodes.append(right_nodes)
+            batch_right_children.append(right_children)
+            batch_right_labels_one_hot.append(right_label_one_hot)
+            batch_right_labels.append(right_label)
+            
+            samples += 1
 
-        samples += 1
+        
+            if samples >= batch_size:
+                yield _pad_batch_siamese_2_side(batch_left_nodes, batch_left_children,batch_left_labels_one_hot, batch_left_labels, batch_right_nodes, batch_right_children,batch_right_labels_one_hot, batch_right_labels)
+                batch_left_nodes, batch_left_children, batch_left_labels_one_hot, batch_left_labels = [], [], [], []
 
-        max_children_left = max([len(x) for x in batch_left_children])
-        max_children_right = max([len(x) for x in batch_right_children])
+                batch_right_nodes, batch_right_children, batch_right_labels_one_hot, batch_right_labels = [], [], [], []
 
-        if max_children_right > 10000 or max_children_left > 10000:
-            continue
-
-        if samples >= batch_size:
-            yield _pad_batch_siamese_2_side(batch_left_nodes, batch_left_children,batch_left_labels_one_hot, batch_left_labels, batch_right_nodes, batch_right_children,batch_right_labels_one_hot, batch_right_labels)
-            batch_left_nodes, batch_left_children, batch_left_labels_one_hot, batch_left_labels = [], [], [], []
-
-            batch_right_nodes, batch_right_children, batch_right_labels_one_hot, batch_right_labels = [], [], [], []
-
-            samples = 0
+                samples = 0
 
     if batch_left_nodes and batch_right_labels:
         yield _pad_batch_siamese_2_side(batch_left_nodes, batch_left_children,batch_left_labels_one_hot, batch_left_labels, batch_right_nodes, batch_right_children,batch_right_labels_one_hot, batch_right_labels)
