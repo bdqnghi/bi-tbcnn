@@ -6,6 +6,10 @@ Engineering (NL4SE) workshop at AAAI'18 conference</a>.
 
 You can find the paper here: https://arxiv.org/abs/1710.06159
 
+Here's our proposed Neural Network structure. In short, this structure is a variance of the Siamese Neural Network (SNN), which is  a class of Neural Network used for finding similarity or a relationship between two comparable things. Each sub network in this case is a Tree-based Convolutional Neural Network (https://arxiv.org/abs/1409.5718). The difference between our Bi-TBCNN and SNN is that we don't use the contrastive loss function. Instead, we concat the features of 2 comparable things into 1 vector and perform classification on that aggregated vector.
+
+![workflow](doc/model.png)
+
 We have prepared a fully automated workflow (Figure 1) for you to classify programs against known algorithm names.
 
 ![workflow](doc/workflow.png)
