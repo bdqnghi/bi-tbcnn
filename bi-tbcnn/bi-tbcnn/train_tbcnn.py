@@ -13,10 +13,10 @@ import random
 from parameters import LEARN_RATE, EPOCHS, CHECKPOINT_EVERY, BATCH_SIZE
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
-os.environ['CUDA_VISIBLE_DEVICES'] = "-1"
+os.environ['CUDA_VISIBLE_DEVICES'] = "0"
 
 
-def train_model(logdir, infile, embedfile, epochs=EPOCHS):
+def train_model(logdir, infile, embedfile, epochs=EPOCHS, training, testing):
     """Train a classifier to label ASTs"""
 
     print("Loading trees...")
@@ -61,59 +61,61 @@ def train_model(logdir, infile, embedfile, epochs=EPOCHS):
 
     checkfile = os.path.join(logdir, 'cnn_tree.ckpt')
 
-    print("Begin training..........")
-    num_batches = len(trees) // BATCH_SIZE + (1 if len(trees) % BATCH_SIZE != 0 else 0)
-    for epoch in range(1, epochs+1):
-        for i, batch in enumerate(sampling.batch_samples(
-            sampling.gen_samples(trees, labels, embeddings, embed_lookup), BATCH_SIZE
-        )):
-            nodes, children, batch_labels = batch
-            step = (epoch - 1) * num_batches + i * BATCH_SIZE
+    if training == "True":
+        print("Begin training..........")
+        num_batches = len(trees) // BATCH_SIZE + (1 if len(trees) % BATCH_SIZE != 0 else 0)
+        for epoch in range(1, epochs+1):
+            for i, batch in enumerate(sampling.batch_samples(
+                sampling.gen_samples(trees, labels, embeddings, embed_lookup), BATCH_SIZE
+            )):
+                nodes, children, batch_labels = batch
+                step = (epoch - 1) * num_batches + i * BATCH_SIZE
 
-            if not nodes:
-                continue # don't try to train on an empty batch
-            # print(batch_labels)
-            _, summary, err, out = sess.run(
-                [train_step, summaries, loss_node, out_node],
+                if not nodes:
+                    continue # don't try to train on an empty batch
+                # print(batch_labels)
+                _, summary, err, out = sess.run(
+                    [train_step, summaries, loss_node, out_node],
+                    feed_dict={
+                        nodes_node: nodes,
+                        children_node: children,
+                        labels_node: batch_labels
+                    }
+                )
+
+                print('Epoch:', epoch, 'Step:', step, 'Loss:', err, 'Max nodes:', len(nodes[0]))
+
+                writer.add_summary(summary, step)
+                if step % CHECKPOINT_EVERY == 0:
+                    # save state so we can resume later
+                    saver.save(sess, os.path.join(checkfile), step)
+                    print('Checkpoint saved, epoch:' + str(epoch) + ', step: ' + str(step) + ', loss: ' + str(err) + '.')
+
+        saver.save(sess, os.path.join(checkfile), step)
+
+    # compute the training accuracy
+    if testing == "True":
+        correct_labels = []
+        predictions = []
+        print('Computing training accuracy...')
+        for batch in sampling.batch_samples(
+            sampling.gen_samples(test_trees, labels, embeddings, embed_lookup), 1
+        ):
+            nodes, children, batch_labels = batch
+            output = sess.run([out_node],
                 feed_dict={
                     nodes_node: nodes,
                     children_node: children,
-                    labels_node: batch_labels
                 }
             )
+            print(output)
+            correct_labels.append(np.argmax(batch_labels))
+            predictions.append(np.argmax(output))
 
-            print('Epoch:', epoch, 'Step:', step, 'Loss:', err, 'Max nodes:', len(nodes[0]))
-
-            writer.add_summary(summary, step)
-            if step % CHECKPOINT_EVERY == 0:
-                # save state so we can resume later
-                saver.save(sess, os.path.join(checkfile), step)
-                print('Checkpoint saved, epoch:' + str(epoch) + ', step: ' + str(step) + ', loss: ' + str(err) + '.')
-
-    saver.save(sess, os.path.join(checkfile), step)
-
-    # compute the training accuracy
-    correct_labels = []
-    predictions = []
-    print('Computing training accuracy...')
-    for batch in sampling.batch_samples(
-        sampling.gen_samples(test_trees, labels, embeddings, embed_lookup), 1
-    ):
-        nodes, children, batch_labels = batch
-        output = sess.run([out_node],
-            feed_dict={
-                nodes_node: nodes,
-                children_node: children,
-            }
-        )
-        print(output)
-        correct_labels.append(np.argmax(batch_labels))
-        predictions.append(np.argmax(output))
-
-    target_names = list(labels)
-    print('Accuracy:', accuracy_score(correct_labels, predictions))
-    print(classification_report(correct_labels, predictions, target_names=target_names))
-    print(confusion_matrix(correct_labels, predictions))
+        target_names = list(labels)
+        print('Accuracy:', accuracy_score(correct_labels, predictions))
+        print(classification_report(correct_labels, predictions, target_names=target_names))
+        print(confusion_matrix(correct_labels, predictions))
 
 
 def main():
@@ -121,7 +123,10 @@ def main():
     logdir = sys.argv[1]
     inputs = sys.argv[2]
     embeddings = sys.argv[3]
-    train_model(logdir,inputs,embeddings) 
+    training = sys.argv[4]
+    testing = sys.argv[5]
+
+    train_model(logdir,inputs,embeddings, training, testing) 
 
 if __name__ == "__main__":
     main()
