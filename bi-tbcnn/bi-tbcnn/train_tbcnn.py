@@ -16,7 +16,7 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 os.environ['CUDA_VISIBLE_DEVICES'] = "0"
 
 
-def train_model(logdir, infile, embedfile, epochs=EPOCHS, training, testing):
+def train_model(logdir, infile, embedfile, epochs=EPOCHS, training="True", testing="True"):
     """Train a classifier to label ASTs"""
 
     print("Loading trees...")
