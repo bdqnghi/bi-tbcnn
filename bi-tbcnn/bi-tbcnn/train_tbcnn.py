@@ -126,7 +126,7 @@ def main():
     training = sys.argv[4]
     testing = sys.argv[5]
 
-    train_model(logdir,inputs,embeddings, training, testing) 
+    train_model(logdir,inputs,embeddings,EPOCHS, training, testing) 
 
 if __name__ == "__main__":
     main()
