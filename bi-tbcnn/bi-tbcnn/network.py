@@ -4,6 +4,23 @@ described in Lili Mou et al. (2015) https://arxiv.org/pdf/1409.5718.pdf"""
 import math
 import tensorflow as tf
 
+
+def init_net(feature_size, label_size):
+    """Initialize an empty network."""
+
+    with tf.name_scope('inputs'):
+        nodes = tf.placeholder(tf.float32, shape=(None, None, feature_size), name='tree')
+        children = tf.placeholder(tf.int32, shape=(None, None, None), name='children')
+
+    with tf.name_scope('network'):
+        conv1 = conv_layer(1, 100, nodes, children, feature_size)
+        #conv2 = conv_layer(1, 10, conv1, children, 100)
+        pooling = pooling_layer(conv1)
+        hidden = hidden_layer(pooling, 100, label_size)
+
+    return nodes, children, hidden
+
+
 def init_net_for_siamese(feature_size):
     """Initialize an empty network."""
 
