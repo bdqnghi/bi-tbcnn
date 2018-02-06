@@ -221,10 +221,13 @@ def batch_samples(gen, batch_size):
         # print n
         # print c
         # print l
-        nodes.append(n)
-        children.append(c)
-        labels.append(l)
-        samples += 1
+        if len(c) > 6000 and len(c) < 20000:
+            nodes.append(n)
+            children.append(c)
+            labels.append(l)
+            samples += 1
+
+
         if samples >= batch_size:
             yield _pad_batch(nodes, children, labels)
             nodes, children, labels = [], [], []
