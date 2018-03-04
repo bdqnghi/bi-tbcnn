@@ -147,15 +147,19 @@ all_0_pairs = []
 targets_1 = []
 targets_0 = []
 for i,cpp_ele in tqdm(enumerate(cpp_train_weighted_matrix)):
-   
-    for j,java_ele in tqdm(enumerate(java_train_weighted_matrix)):
+    
+    java_tuple = list(zip(java_train_weighted_matrix,train_java_labels))
+    random_java_tuple = random.sample(java_tuple,100)
+
+    sample_java_train_weighted_matrix, sample_train_java_labels = zip(*random_java_tuple)
+    for j,java_ele in tqdm(enumerate(sample_java_train_weighted_matrix)):
 
         # print java_ele.tolist()
         # concatenate_vector =  np.hstack([cpp_ele,java_ele])
         concatenate_vector = cpp_ele.tolist()
         concatenate_vector.extend(java_ele.tolist())
         # print concatenate_vector
-        if train_cpp_labels[i] == train_java_labels[j]:         
+        if train_cpp_labels[i] == sample_train_java_labels[j]:         
             all_1_pairs.append(concatenate_vector)
             targets_1.append(1)
         else:
