@@ -97,8 +97,8 @@ print "Length of train java : " + str(len(all_java_dict))
 
 print "Finish preparing training and testing pairs........"
 
-# all_cpp_dict = random.sample(all_cpp_dict,300)
-# all_java_dict = random.sample(all_java_dict,300)
+all_cpp_dict = random.sample(all_cpp_dict,2500)
+all_java_dict = random.sample(all_java_dict,2500)
 
 all_cpp_train, all_cpp_label = zip(*all_cpp_dict)
 all_java_train, all_java_label = zip(*all_java_dict)
@@ -149,7 +149,7 @@ targets_0 = []
 for i,cpp_ele in tqdm(enumerate(cpp_train_weighted_matrix)):
     
     java_tuple = list(zip(java_train_weighted_matrix,train_java_labels))
-    random_java_tuple = random.sample(java_tuple,100)
+    random_java_tuple = random.sample(java_tuple,50)
 
     sample_java_train_weighted_matrix, sample_train_java_labels = zip(*random_java_tuple)
     for j,java_ele in tqdm(enumerate(sample_java_train_weighted_matrix)):
@@ -217,7 +217,7 @@ print "Preparing test pairs..........."
 for i,cpp_ele in tqdm(enumerate(cpp_test_weighted_matrix)):
     
     java_tuple = list(zip(java_test_weighted_matrix,test_java_labels))
-    random_java_tuple = random.sample(java_tuple,100)
+    random_java_tuple = random.sample(java_tuple,50)
 
     sample_java_test_weighted_matrix, sample_test_java_labels = zip(*random_java_tuple)
 
