@@ -97,8 +97,8 @@ print "Length of train java : " + str(len(all_java_dict))
 
 print "Finish preparing training and testing pairs........"
 
-all_cpp_dict = random.sample(all_cpp_dict,300)
-all_java_dict = random.sample(all_java_dict,300)
+# all_cpp_dict = random.sample(all_cpp_dict,300)
+# all_java_dict = random.sample(all_java_dict,300)
 
 all_cpp_train, all_cpp_label = zip(*all_cpp_dict)
 all_java_train, all_java_label = zip(*all_java_dict)
@@ -216,7 +216,12 @@ test_targets = []
 print "Preparing test pairs..........."
 for i,cpp_ele in tqdm(enumerate(cpp_test_weighted_matrix)):
     
-    for j,java_ele in tqdm(enumerate(java_test_weighted_matrix)):
+    java_tuple = list(zip(java_test_weighted_matrix,test_java_labels))
+    random_java_tuple = random.sample(java_tuple,100)
+
+    sample_java_test_weighted_matrix, sample_test_java_labels = zip(*random_java_tuple)
+
+    for j,java_ele in tqdm(enumerate(sample_java_test_weighted_matrix)):
 
         concatenate_vector = cpp_ele.tolist()
         concatenate_vector.extend(java_ele.tolist())
@@ -224,7 +229,7 @@ for i,cpp_ele in tqdm(enumerate(cpp_test_weighted_matrix)):
         # print concatenate_vector.shape
         # print concatenate_vector
         # print all_cpp_label[i], all_java_label[i]
-        if test_cpp_labels[i] == test_java_labels[j]:         
+        if test_cpp_labels[i] == sample_test_java_labels[j]:         
             all_test_1_pairs.append(concatenate_vector)
             test_targets.append(1)
         else:
