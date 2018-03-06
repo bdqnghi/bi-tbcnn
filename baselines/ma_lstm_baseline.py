@@ -19,6 +19,9 @@ from keras.optimizers import Adadelta
 from keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import train_test_split
 # File paths
+
+os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6"
+
 DATA = './corpus/pairs2.csv'
 # TEST_CSV = '..../test.csv'
 CPP_EMBEDDING_FILE = './baselines/cpp2vec'
@@ -116,7 +119,7 @@ assert len(X_train['left']) == len(Y_train)
 # Model variables
 n_hidden = 50
 gradient_clipping_norm = 1.25
-batch_size = 5
+batch_size = 32
 n_epoch = 50
 
 def exponent_neg_manhattan_distance(left, right):
