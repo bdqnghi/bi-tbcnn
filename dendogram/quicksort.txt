@@ -1,0 +1,30 @@
+-------------------------------
+Left programs : quicksort vs Right cluster : bubblesort
+0.62762
+-------------------------------
+Left programs : quicksort vs Right cluster : bfs
+0.119411
+-------------------------------
+Left programs : quicksort vs Right cluster : dfs
+0.000414917
+-------------------------------
+Left programs : quicksort vs Right cluster : heap
+0.114332
+-------------------------------
+Left programs : quicksort vs Right cluster : knapsack
+0.427991
+-------------------------------
+Left programs : quicksort vs Right cluster : linkedlist
+0.27284
+-------------------------------
+Left programs : quicksort vs Right cluster : mergesort
+0.218275
+-------------------------------
+Left programs : quicksort vs Right cluster : queue
+0.0750487
+-------------------------------
+Left programs : quicksort vs Right cluster : quicksort
+0.570377
+-------------------------------
+Left programs : quicksort vs Right cluster : stack
+0.0689548

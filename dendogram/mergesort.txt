@@ -1,0 +1,30 @@
+-------------------------------
+Left programs : mergesort vs Right cluster : bubblesort
+0.65942
+-------------------------------
+Left programs : mergesort vs Right cluster : bfs
+0.102055
+-------------------------------
+Left programs : mergesort vs Right cluster : dfs
+0.0
+-------------------------------
+Left programs : mergesort vs Right cluster : heap
+0.0893637
+-------------------------------
+Left programs : mergesort vs Right cluster : knapsack
+0.621594
+-------------------------------
+Left programs : mergesort vs Right cluster : linkedlist
+0.29937
+-------------------------------
+Left programs : mergesort vs Right cluster : mergesort
+0.709796
+-------------------------------
+Left programs : mergesort vs Right cluster : queue
+0.0257759
+-------------------------------
+Left programs : mergesort vs Right cluster : quicksort
+0.580692
+-------------------------------
+Left programs : mergesort vs Right cluster : stack
+0.0482946
