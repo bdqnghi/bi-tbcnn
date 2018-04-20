@@ -1,4 +1,4 @@
-# Cross-Language Program Classification using Bilateral Tree-based Convolutional Neural Networks
+# Bilateral Tree-based Convolutional Neural Networks
 
 The project is an implementation of Bi-TBCNN introduced in our paper accepted by <a
 href="https://nl4se.github.io">the 1st Natural Languages for Software
