@@ -5,20 +5,15 @@ if [ ! -f /tmp/convert ]; then
 src_file=\$1
 mkdir -p /ast/\$(dirname \$src_file)
 if [ "\${src_file/.python/}" == "\${src_file}" ]; then
-	pkl_file=/ast/\$src_file.pkl
-	if [ ! -f \$pkl_file ]; then
-		pb_file=/ast/\$src_file.pb
-		if [ ! -f \$pb_file ]; then
-			fast -p \$src_file \$pb_file
-			fast -S \$pb_file \$pb_file.out > /dev/null
-			mv \$pb_file.out.slice.pb \$pb_file 
+	json_file=/ast/\$src_file.json
+	if [ ! -f \$json_file ]; then
+		fbs_file=/ast/\$src_file.fbs
+		if [ ! -f \$fbs_file ]; then
+			fast -S -G \$src_file \$fbs_file > /dev/null
 		fi
-		fast \$pb_file \$pkl_file
-		rm -f \$pb_file
+		ggnn \$fbs_file \$json_file
+		rm -f \$fbs_file
 	fi
-else
-	pkl_file=/ast/\$src_file.pkl
-	python /bi-tbcnn/parser/python_to_pickle.py \$src_file \$pkl_file
 fi
 EOF
 	chmod +x /tmp/convert
