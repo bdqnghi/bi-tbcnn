@@ -5,14 +5,12 @@ if [ ! -f /tmp/convert ]; then
 src_file=\$1
 mkdir -p /ast/\$(dirname \$src_file)
 if [ "\${src_file/.python/}" == "\${src_file}" ]; then
-	#json_file=/ast/\$src_file.json
+	pb_file=/ast/\$src_file.pb
 	pkl_file=/ast/\$src_file.pkl
 	if [ ! -f \$pkl_file ]; then
-		#fbs_file=/ast/\$src_file.fbs
-		#fast -S -G \$src_file \$fbs_file > /dev/null
-		fast -S \$src_file \$pkl_file > /dev/null
-		#ggnn \$fbs_file \$json_file
-		#rm -f \$fbs_file
+		fast -S \$src_file \$pb_file > /dev/null
+		fast \$pb_file \$pkl_file > /dev/null
+		rm -f \$pb_file
 	fi
 fi
 EOF
