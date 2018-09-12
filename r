@@ -8,7 +8,7 @@ if [ ! -d code ]; then
 fi 
 if [ ! -d ast ]; then
 	mkdir -p ast
-	docker run -v $(pwd)/code:/code:ro -v $(pwd)/ast:/ast -it yijun/bi-tbcnn:parser
+	docker run -v $(pwd)/code:/code:ro -v $(pwd)/ast:/ast --entrypoint bash -it yijun/bi-tbcnn:parser -c /bi-tbcnn/run
 fi
 if [ ! -d vec ]; then
 	mkdir -p vec
