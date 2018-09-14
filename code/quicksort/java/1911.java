@@ -1,48 +1,75 @@
-import java.util.*;
-import java.util.Arrays;
-public class Quicksort{
-	public static void main(String[] args){
-		int[] x = {8,5,7,6,2,4,1,3,9 };
-		System.out.println(Arrays.toString(x));
- 
-		int low = 0;
-		int high = x.length - 1;
- 
-		quickSort(x, low, high);
-		System.out.println(Arrays.toString(x));
-	}
+package Quicksort;
 
-	public static void quickSort(int[] arr, int low,int high){
-		if(arr==null || arr.length==0){
-			return;
-		}
-		if(low>=high){
-			return;
-		}
+import sun.plugin.javascript.navig.Array;
 
-		int pivot=arr[(low+high)/2];
-		int i=low; int j=high;
-		while(i<=j){
-			while(arr[i]<pivot)
-				i++;
-			while(arr[j]>pivot)
-				j--;
-			if(i<j){
-				int temp=arr[i];
-				arr[i]=arr[j];
-				arr[j]=temp;
-			}
-			i++;
-			j--;
+/**
+ * Created by admin on 04.12.2017.
+ */
+public class Quicksort {
 
-		}
+    private int array[];
 
+    private void sort(int[] inputArr) {
 
-		if(low<j){
-			quickSort(arr,low,j);
-		}
-		if(high>i){
-			quickSort(arr,i,high);
-		}
-	} 
+        if (inputArr == null || inputArr.length == 0) {
+            return;
+        }
+        this.array = inputArr;
+        int length = inputArr.length;
+        quickSort(0, length - 1);
+    }
+
+    private void quickSort(int lowerIndex, int higherIndex) {
+
+        int i = lowerIndex;
+        int j = higherIndex;
+        // calculate pivot number, I am taking pivot as middle index number
+        int pivot = array[lowerIndex + (higherIndex - lowerIndex) / 2];
+        // Divide into two arrays
+        while (i <= j) {
+//            /**
+//             * In each iteration, we will identify a number from left side which
+//             * is greater then the pivot value, and also we will identify a number
+//             * from right side which is less then the pivot value. Once the search
+//             * is done, then we exchange both numbers.
+//             */
+            while (array[i] < pivot) {
+                i++;
+            }
+            while (array[j] > pivot) {
+                j--;
+            }
+            if (i <= j) {
+                exchangeNumbers(i, j);
+                //move index to next position on both sides
+                i++;
+                j--;
+            }
+        }
+        // call quickSort() method recursively
+        if (lowerIndex < j)
+            quickSort(lowerIndex, j);
+        if (i < higherIndex)
+            quickSort(i, higherIndex);
+    }
+
+    private void exchangeNumbers(int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    public static void main(String arg[]) {
+
+        Quicksort sorter = new Quicksort();
+        int[] input = { 24, 2, 45, -20, 56, 75, 7, -56, 99, 53, 12 };
+        sorter.sort(input);
+
+        for(int i : input) {
+            System.out.print(i);
+            System.out.print(" ");
+        }
+
+    }
+
 }

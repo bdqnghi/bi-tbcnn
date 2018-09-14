@@ -1,33 +1,42 @@
-package algorithms.bubblesort;
+class Bubblesort {
 
-import java.util.ArrayList;
-import java.util.Collections;
-
-import algorithms.IAlgorithm;
-
-public class Bubblesort implements IAlgorithm{
-
-	@Override
-	public ArrayList<Integer> sortList(ArrayList<Integer> unsortedList) {
-		
-		Boolean Changes = true;
-
-		while(Changes){
-			Changes = false;
-			for(int x = 0; x < unsortedList.size() - 1; x++){
-				if(unsortedList.get(x) > unsortedList.get(x+1)){
-					Collections.swap(unsortedList, x, x+1);
-					Changes = true;
-				}
-			}
+	int arr[];
+	int elem;
+	
+	Bubblesort(int e)
+	{
+		int i = 0;
+		arr = new int[e];
+		elem = e;
+		for(i = 0; i < e; i++) {
+			arr[i] = int.random;
 		}
-		return unsortedList;
+	}
+	
+	sort() :Void
+	{
+  		int top = elem - 1;
+  		while(top > 0) {
+    		int i = 0;
+			while(i < top) {
+	  			if(arr[i] > arr[i + 1]) {
+					int t = arr[i];
+	      			arr[i] = arr[i + 1];
+		  			arr[i + 1] = t;
+				}
+	  			i = i + 1;
+			}
+			top = top - 1;
+  		}
 	}
 
-	@Override
-	public String returnCode() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  public static void main(String argv[])
+  {
+    int i, loops = (new Integer(argv[0])).intValue();
 
+    for(; loops > 0; loops--) {
+      Bubblesort bs = new Bubblesort(1000);
+	  bs.sort();
+    }
+  }
 }

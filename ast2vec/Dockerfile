@@ -1,4 +1,5 @@
-FROM tensorflow/tensorflow
+#FROM tensorflow/tensorflow
+FROM tensorflow/tensorflow:latest-gpu
 RUN apt-get update
 RUN apt-get install time
 RUN pip install tqdm

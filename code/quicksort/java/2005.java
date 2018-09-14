@@ -1,53 +1,75 @@
-package Introduction;
+import java.util.Arrays;
 
-import CtCILibrary.AssortedMethods;
+public class Quicksort  {
+  private int[] numbers;
+  private int number;
+  public int cComparisons = 0;
+  public int cSwaps = 0;
+  public long executionTime = 0;
+private String order;
 
-public class Quicksort {
-	public static void swap(int[] array, int i, int j) {
-		int tmp = array[i];
-		array[i] = array[j];
-		array[j] = tmp;
-	}
-	
-	public static int partition(int[] arr, int left, int right) {
-		int pivot = arr[(left + right) / 2]; // Pick a pivot point. Can be an element		
-		
-		while (left <= right) { // Until we've gone through the whole array
-			// Find element on left that should be on right
-			while (arr[left] < pivot) { 
-				left++;
-			}
-			
-			// Find element on right that should be on left
-			while (arr[right] > pivot) {
-				right--;
-			}
-			
-			// Swap elements, and move left and right indices
-			if (left <= right) {
-				swap(arr, left, right);
-				left++;
-				right--;
-			}
-		}
-		return left; 
-	}
-	
-	public static void quickSort(int[] arr, int left, int right) {
-		int index = partition(arr, left, right); 
-		if (left < index - 1) { // Sort left half
-			quickSort(arr, left, index - 1);
-		}
-		if (index < right) { // Sort right half
-			quickSort(arr, index, right);
-		}
-	}
-	
-	public static void main(String[] args) {
-		int[] arr = AssortedMethods.randomArray(20, 0, 6);
-		AssortedMethods.printIntArray(arr);	
-		quickSort(arr, 0, arr.length - 1);
-		AssortedMethods.printIntArray(arr);
-	}
+  public void sort(int[] values, String order) {
+	  this.order = order;
+	final long startTime = System.nanoTime();
+    // check for empty or null array
+    if (values == null || values.length == 0){
+      return;
+    }
+    this.numbers = values;
+    number = values.length;
+    quicksort(0, number - 1);
+    executionTime = (System.nanoTime() - startTime) / 1000000;
+  }
+  
+  public void print(){
+	  System.out.println("Quicksort " + this.order + ": aantal vergelijkingen (" + this.cComparisons + "), aantal swaps (" + this.cSwaps + "), uitvoertijd (" + this.executionTime  + "ms)");
+	  //System.out.println(Arrays.toString(this.numbers));
+	  System.out.println();
+  }
 
-}
+  private void quicksort(int low, int high) {
+    int i = low, j = high;
+    // Get the pivot element from the middle of the list
+    //int pivot = numbers[low + (high-low)/2];
+    int pivot = numbers[low];
+
+    // Divide into two lists
+    while (i <= j) {
+      // If the current value from the left list is smaller then the pivot
+      // element then get the next element from the left list
+      while (numbers[i] < pivot) {
+        i++;
+        this.cComparisons++;
+      }
+      // If the current value from the right list is larger then the pivot
+      // element then get the next element from the right list
+      while (numbers[j] > pivot) {
+        j--;
+        this.cComparisons++;
+      }
+
+      // If we have found a values in the left list which is larger then
+      // the pivot element and if we have found a value in the right list
+      // which is smaller then the pivot element then we exchange the
+      // values.
+      // As we are done we can increase i and j
+      if (i <= j) {
+        exchange(i, j);
+        i++;
+        j--;
+      }
+    }
+    // Recursion
+    if (low < j)
+      quicksort(low, j);
+    if (i < high)
+      quicksort(i, high);
+  }
+
+  private void exchange(int i, int j) {
+    int temp = numbers[i];
+    numbers[i] = numbers[j];
+    numbers[j] = temp;
+    this.cSwaps++;
+  }
+} 

@@ -1,53 +1,85 @@
-package Introduction;
+package practise.programs;
 
-import CtCILibrary.AssortedMethods;
+import java.util.Scanner;
 
-public class Quicksort {
-	public static void swap(int[] array, int i, int j) {
-		int tmp = array[i];
-		array[i] = array[j];
-		array[j] = tmp;
-	}
+public class Quicksort 
+{
 	
-	public static int partition(int[] arr, int left, int right) {
-		int pivot = arr[(left + right) / 2]; // Pick a pivot point. Can be an element		
-		
-		while (left <= right) { // Until we've gone through the whole array
-			// Find element on left that should be on right
-			while (arr[left] < pivot) { 
-				left++;
-			}
-			
-			// Find element on right that should be on left
-			while (arr[right] > pivot) {
-				right--;
-			}
-			
-			// Swap elements, and move left and right indices
-			if (left <= right) {
-				swap(arr, left, right);
-				left++;
-				right--;
-			}
-		}
-		return left; 
+	static void display(int arr[],int low,int up)
+	{
+	int i;
+	for(i=low;i<=up;i++)
+	System.out.print(arr[i]+"  ");
 	}
-	
-	public static void quickSort(int[] arr, int left, int right) {
-		int index = partition(arr, left, right); 
-		if (left < index - 1) { // Sort left half
-			quickSort(arr, left, index - 1);
-		}
-		if (index < right) { // Sort right half
-			quickSort(arr, index, right);
-		}
+	static void quick(int arr[],int low,int up)
+	{
+	int piv,temp,left,right;
+	 boolean pivot_placed=false;
+	//setting the pointers
+	System.out.println("low : "+low+" up :  "+up);
+	left=low;
+	right=up;
+	piv=low; /*Take the first element of sublist as piv */
+	if (low>=up)
+	return;
+	System.out.println("sub list : ");
+	display(arr,low,up);
+	/*Loop till pivot is placed at proper place in the sublist*/
+	while(pivot_placed==false)
+	{
+	/*Compare from right to left  */
+	while( arr[piv]<=arr[right] && piv!=right )
+	right=right-1;
+	if ( piv==right )
+	      pivot_placed=true;
+	if ( arr[piv] > arr[right] )
+	{
+	temp=arr[piv];
+	arr[piv]=arr[right];
+	arr[right]=temp;
+	piv=right;
 	}
-	
-	public static void main(String[] args) {
-		int[] arr = AssortedMethods.randomArray(20, 0, 6);
-		AssortedMethods.printIntArray(arr);	
-		quickSort(arr, 0, arr.length - 1);
-		AssortedMethods.printIntArray(arr);
+	/*Compare from left to right */
+	while( arr[piv]>=arr[left] && left!=piv )
+	left=left+1;
+	if (piv==left)
+	pivot_placed=true;
+	if ( arr[piv] < arr[left] )
+	{
+	temp=arr[piv];
+	arr[piv]=arr[left];
+	arr[left]=temp;
+	piv=left;
+	}
+	}/*End of while */
+	System.out.println();
+	System.out.println("pivot placed is  "+arr[piv]);
+	display(arr,low,up);
+	System.out.println();
+	quick(arr,low,piv-1);
+	quick(arr,piv+1,up);
+	}/*End of quick()*/
+
+	public static void main(String[] args) 
+	{
+		int array[]=new int[30];
+		int n,i;
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of elements : ");
+		n=sc.nextInt();
+		for (i=0;i<n;i++)
+		{
+		System.out.println("Enter element : "+(i+1));
+		array[i]=sc.nextInt();
+		}
+		System.out.println("Unsorted list is");
+		System.out.println();
+		display(array,0,n-1);
+		System.out.println();
+		quick (array,0,n-1);
+		System.out.println("sorted list is");
+		System.out.println();
+		display(array,0,n-1);
 	}
 
 }

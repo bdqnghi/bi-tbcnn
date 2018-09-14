@@ -1,48 +1,46 @@
-import java.util.*;
-import java.util.Arrays;
-public class Quicksort{
-	public static void main(String[] args){
-		int[] x = { 9, 2, 4, 7, 3, 7, 10 };
-		System.out.println(Arrays.toString(x));
- 
-		int low = 0;
-		int high = x.length - 1;
- 
-		quickSort(x, low, high);
-		System.out.println(Arrays.toString(x));
-	}
+public class Quicksort  {
+    private int[] numbers;
+    private int number;
 
-	public static void quickSort(int[] arr, int low,int high){
-		if(arr==null || arr.length==0){
-			return;
-		}
-		if(low>=high){
-			return;
-		}
+    public void sort(int[] values) {
+        // check for empty or null array
+        if (values ==null || values.length==0){
+            return;
+        }
+        this.numbers = values;
+        number = values.length;
+        quicksort(0, number - 1);
+    }
 
-		int pivot=arr[low+(high-low)/2];
-		int i=low; int j=high;
-		while(i<=j){
-			while(arr[i]<pivot)
-				i++;
-			while(arr[j]>pivot)
-				j--;
-			if(i<=j){
-				int temp=arr[i];
-				arr[i]=arr[j];
-				arr[j]=temp;
-				i++;
-				j--;
-			}
+    private void quicksort(int low, int high) {
+        int i = low, j = high;
+        int pivot = numbers[low + (high-low)/2];
 
-		}
+        // Divide into two lists
+        while (i <= j) {
+            while (numbers[i] < pivot) {
+                i++;
+            }
+            while (numbers[j] > pivot) {
+                j--;
+            }
 
+            if (i <= j) {
+                exchange(i, j);
+                i++;
+                j--;
+            }
+        }
 
-		if(low<j){
-			quickSort(arr,low,j);
-		}
-		if(high>i){
-			quickSort(arr,i,high);
-		}
-	} 
+        if (low < j)
+            quicksort(low, j);
+        if (i < high)
+            quicksort(i, high);
+    }
+
+    private void exchange(int i, int j) {
+        int temp = numbers[i];
+        numbers[i] = numbers[j];
+        numbers[j] = temp;
+    }
 }
