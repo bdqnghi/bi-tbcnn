@@ -47,6 +47,21 @@ def cut_pair_wise(left_inputs,right_inputs):
     range_data = min(len(left_inputs), len(right_inputs))
     return left_inputs[0:range_data], right_inputs[0:range_data]
 
+
+def get_all_pairs_for_training(left_inputs,right_inputs):
+    all_1_pairs = []
+    all_0_pairs = []
+    count = 0
+    for left_tree in tqdm(left_inputs):
+        for right_tree in right_inputs:
+            if left_tree["label"] == right_tree["label"]:
+                all_1_pairs.append((left_tree,right_tree))
+            else:
+                all_0_pairs.append((left_tree,right_tree))
+            print(count)
+            count += 1
+    return all_1_pairs, all_0_pairs
+
 def generate_zero_pairwise(source,targets):
     source_part = len(source)/len(targets)
     right_data = []
@@ -65,7 +80,6 @@ def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_lab
     replaced by its vector embedding, and a child lookup table."""
 
     # encode labels as one-hot vectors
-   
     left_label_lookup = {label: _onehot(i, len(left_labels)) for i, label in enumerate(left_labels)}
 
     right_label_lookup = {label: _onehot(i, len(right_labels)) for i, label in enumerate(right_labels)}
@@ -91,7 +105,6 @@ def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_lab
         while left_queue:   
             node, parent_ind = left_queue.pop(0)    
             node_ind = len(left_nodes)   
-            # print node
             left_queue.extend([(child, node_ind) for child in node['children']])  
             left_children.append([])    
             if parent_ind > -1:
@@ -103,7 +116,14 @@ def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_lab
             else:
                 node_index = int(node['node'])
             left_nodes.append(left_vectors[node_index])
+      
+
+        batch_left_nodes.append(left_nodes)
+        batch_left_children.append(left_children)
+        batch_left_labels_one_hot.append(left_label_one_hot)
+        batch_left_labels.append(left_label)
         
+
 
         right_tree = right_trees[i]
 
@@ -122,22 +142,18 @@ def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_lab
                 right_children[parent_ind].append(node_ind)      
             node_index = int(node['node'])
             right_nodes.append(right_vectors[node_index])
+      
+
+        batch_right_nodes.append(right_nodes)
+        batch_right_children.append(right_children)
+        batch_right_labels_one_hot.append(right_label_one_hot)
+        batch_right_labels.append(right_label)
         
-        if len(right_children) > 1 and len(right_children) < 5000 and len(left_children) > 1 and len(left_children) < 5000:
 
-            batch_left_nodes.append(left_nodes)
-            batch_left_children.append(left_children)
-            batch_left_labels_one_hot.append(left_label_one_hot)
-            batch_left_labels.append(left_label)
 
-            batch_right_nodes.append(right_nodes)
-            batch_right_children.append(right_children)
-            batch_right_labels_one_hot.append(right_label_one_hot)
-            batch_right_labels.append(right_label)
-            
-            samples += 1
+        samples += 1
 
-        
+
         if samples >= batch_size:
             yield _pad_batch_siamese_2_side(batch_left_nodes, batch_left_children,batch_left_labels_one_hot, batch_left_labels, batch_right_nodes, batch_right_children,batch_right_labels_one_hot, batch_right_labels)
             batch_left_nodes, batch_left_children, batch_left_labels_one_hot, batch_left_labels = [], [], [], []
@@ -145,6 +161,8 @@ def batch_random_samples_2_sides(left_trees, left_labels, right_trees, right_lab
             batch_right_nodes, batch_right_children, batch_right_labels_one_hot, batch_right_labels = [], [], [], []
 
             samples = 0
+
+
 
     if batch_left_nodes and batch_right_labels:
         yield _pad_batch_siamese_2_side(batch_left_nodes, batch_left_children,batch_left_labels_one_hot, batch_left_labels, batch_right_nodes, batch_right_children,batch_right_labels_one_hot, batch_right_labels)
@@ -221,13 +239,10 @@ def batch_samples(gen, batch_size):
         # print n
         # print c
         # print l
-        if len(c) > 6000 and len(c) < 20000:
-            nodes.append(n)
-            children.append(c)
-            labels.append(l)
-            samples += 1
-
-
+        nodes.append(n)
+        children.append(c)
+        labels.append(l)
+        samples += 1
         if samples >= batch_size:
             yield _pad_batch(nodes, children, labels)
             nodes, children, labels = [], [], []
@@ -246,8 +261,6 @@ def _pad_batch_siamese(nodes, children, labels_one_hot, labels):
         return [], [], []
     max_nodes = max([len(x) for x in nodes])
     max_children = max([len(x) for x in children])
-    print("Max nodes : " + str(max_nodes))
-    print("Max children : " + str(max_children))
     feature_len = len(nodes[0][0])
     child_len = max([len(c) for n in children for c in n])
 
