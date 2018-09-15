@@ -20,8 +20,8 @@ random.shuffle(all_1_pairs)
 random.shuffle(all_0_pairs)
 
 
-random_1_pairs = random.sample(all_1_pairs,2000)
-random_0_pairs = random.sample(all_0_pairs,2000)
+random_1_pairs = random.sample(all_1_pairs,200)
+random_0_pairs = random.sample(all_0_pairs,200)
 
 
 
