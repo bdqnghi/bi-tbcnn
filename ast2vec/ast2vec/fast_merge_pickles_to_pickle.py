@@ -2,7 +2,7 @@
 
 import os
 import ast
-import pickle
+import cPickle as pickle
 import sys
 
 def build_tree(script):
