@@ -4,17 +4,17 @@ if [ "$1" == "clean" ]; then
 fi
 if [ ! -d code ]; then
 	mkdir -p code
-	docker run -v $(pwd)/input:/input:ro -v $(pwd)/code:/code -w / -it yijun/bi-tbcnn:crawler
+	docker run -v $(pwd):/e -w /e --entrypoint bash -it yijun/bi-tbcnn -c crawler/run
 fi 
 if [ ! -d ast ]; then
 	mkdir -p ast
-	docker run -v $(pwd)/code:/code:ro -v $(pwd)/ast:/ast -w / --entrypoint bash -it yijun/bi-tbcnn:parser -c /bi-tbcnn/run
+	docker run -v $(pwd):/e -w /e --entrypoint bash -it yijun/bi-tbcnn -c parser/run
 fi
 if [ ! -d vec ]; then
 	mkdir -p vec
-	nvidia-docker run -v $(pwd)/input:/input:ro -v $(pwd)/ast:/ast:ro -v $(pwd)/vec:/vec -it yijun/bi-tbcnn:ast2vec
+	docker run -v $(pwd):/e -w /e --entrypoint bash -it yijun/bi-tbcnn -c ast2vec/run
 fi
 if [ ! -d model ]; then
 	mkdir -p model
-	nvidia-docker run -v $(pwd)/input:/input:ro -v $(pwd)/vec:/vec:ro -v $(pwd)/model:/model -w / -it yijun/bi-tbcnn:bi-tbcnn
+	docker run -v $(pwd):/e -w /e --entrypoint bash -it yijun/bi-tbcnn -c bi-tbcnn/run
 fi
