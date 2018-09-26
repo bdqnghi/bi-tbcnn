@@ -84,7 +84,7 @@ def main():
     with open(sys.argv[1], "rb") as sample_file:
         samples = pickle.load(sample_file)
     
-    learn_vectors(samples, "/vec", sys.argv[2])
+    learn_vectors(samples, "vec", sys.argv[2])
 
 if __name__ == "__main__":
     main()

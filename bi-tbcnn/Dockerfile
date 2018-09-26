@@ -7,4 +7,5 @@ RUN pip install requests
 RUN pip install requests_cache
 RUN pip install network
 ADD . /bi-tbcnn
+WORKDIR /
 CMD ["sh", "-c", "/bi-tbcnn/run"]

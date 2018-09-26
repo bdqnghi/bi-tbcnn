@@ -3,10 +3,10 @@ if [ ! -f /tmp/convert ]; then
 	cat > /tmp/convert <<EOF
 #!/bin/bash
 src_file=\$1
-mkdir -p /ast/\$(dirname \$src_file)
+mkdir -p ast/\$(dirname \$src_file)
 if [ "\${src_file/.python/}" == "\${src_file}" ]; then
-	pb_file=/ast/\$src_file.pb
-	pkl_file=/ast/\$src_file.pkl
+	pb_file=ast/\$src_file.pb
+	pkl_file=ast/\$src_file.pkl
 	if [ ! -f \$pkl_file ]; then
 		fast -S \$src_file \$pb_file > /dev/null
 		fast \$pb_file \$pkl_file > /dev/null
@@ -16,7 +16,7 @@ fi
 EOF
 	chmod +x /tmp/convert
 fi
-cd /code 
+cd code 
 ls | while read f; do
 	if [ -d $f ]; then
 		parallel --eta /tmp/convert ::: $f/*/*

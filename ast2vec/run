@@ -1,15 +1,17 @@
 #!/bin/bash
-cat /input/language.name | while read language ext; do
-  if [ ! -f /vec/fast_algorithms_trees_$language.pkl ]; then
-	  if [ ! -f /vec/fast_algorithms_trees_$language.pkl ]; then
-		  if [ ! -f /vec/fast_algorithms_nodes_$language.pkl ]; then
-			  if [ ! -f /vec/fast_algorithms_$language.pkl ]; then
-				  python /bi-tbcnn/ast2vec/fast_merge_pickles_to_pickle.py /ast $language /vec/fast_algorithms_$language.pkl
+cat input/language.name | grep -v '^#' | while read language ext; do
+  if [ ! -f vec/fast_algorithms_trees_$language.pkl ]; then
+	  if [ ! -f vec/fast_algorithms_trees_$language.pkl ]; then
+		  if [ ! -f vec/fast_algorithms_nodes_$language.pkl ]; then
+			  if [ ! -f vec/fast_algorithms_$language.pkl ]; then
+				  python2 ast2vec/ast2vec/fast_merge_pickles_to_pickle.py ast $language vec/fast_algorithms_$language.pkl
 			  fi
-			  python /bi-tbcnn/ast2vec/fast_pickle_file_to_nodes.py /vec/fast_algorithms_$language.pkl /vec/fast_algorithms_nodes_$language.pkl
+			  mv vec/fast_algorithms_$language.pkl vec/fast_algorithms.$language.pkl
+			  python3 ast2vec/ast2vec/map3.py input/maps.$language.pkl ast2vec/maps.$language.pa
+			  python2 ast2vec/ast2vec/fast_pickle_file_to_nodes.py vec/fast_algorithms_$language.pkl vec/fast_algorithms_nodes_$language.pkl
 		  fi
-		  python /bi-tbcnn/ast2vec/train.py /vec/fast_algorithms_nodes_$language.pkl /vec/fast_pretrained_vectors_$language.pkl
+		  python2 ast2vec/ast2vec/train.py vec/fast_algorithms_nodes_$language.pkl vec/fast_pretrained_vectors_$language.pkl
 	  fi
-	  python /bi-tbcnn/ast2vec/fast_pickle_file_to_training_trees.py /vec/fast_algorithms_$language.pkl /vec/fast_algorithms_trees_$language.pkl
+	  python2 ast2vec/ast2vec/fast_pickle_file_to_training_trees.py vec/fast_algorithms_$language.pkl vec/fast_algorithms_trees_$language.pkl
   fi
 done

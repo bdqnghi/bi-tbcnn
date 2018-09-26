@@ -1,2 +1,2 @@
 #!/bin/sh
-python /bi-tbcnn/crawler/crawler.py
+python crawler/crawler/crawler.py

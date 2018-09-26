@@ -5,5 +5,6 @@ RUN apt-get install time
 RUN pip install tqdm
 RUN pip install requests
 RUN pip install requests_cache
-ADD . /bi-tbcnn
-CMD ["bash", "-c", "/bi-tbcnn/run"]
+ADD . /ast2vec
+WORKDIR /
+CMD ["bash", "-c", "ast2vec/run"]
