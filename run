@@ -1,0 +1,19 @@
+if [ "$1" == "clean" ]; then
+#	rm -rf code ast vec model
+	rm -rf ast vec model
+fi
+if [ ! -d code ]; then
+	mkdir -p code
+fi 
+if [ ! -d ast ]; then
+	mkdir -p ast
+	parser/run
+fi
+if [ ! -d vec ]; then
+	mkdir -p vec
+	ast2vec/run
+fi
+if [ ! -d model ]; then
+	mkdir -p model
+	bi-tbcnn/run
+fi

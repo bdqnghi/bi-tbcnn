@@ -1,4 +1,7 @@
 FROM yijun/fast
+# comment out the following two lines to reset proxy servers
+ENV http_proxy http://wwwcache.open.ac.uk:80
+ENV https_proxy http://wwwcache.open.ac.uk:80
 RUN apk add -U --no-cache parallel
 RUN apk add -U python2
 RUN rm /usr/bin/python
