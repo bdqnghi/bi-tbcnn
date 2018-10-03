@@ -1,0 +1,10 @@
+cfast_pb2
+Data
+p0
+(tRp1
+(dp2
+S'serialized'
+p3
+S'\n\x81\x08\x08\x00B\xb2\x06\x08\x06*\xa5\x06/*      Copyright (C) 2004 Garrett A. Kajmowicz\n\tThis file is part of the uClibc++ Library.\n\n\tThis library is free software; you can redistribute it and/or\n\tmodify it under the terms of the GNU Lesser General Public\n\tLicense as published by the Free Software Foundation; either\n\tversion 2.1 of the License, or (at your option) any later version.\n\n\tThis library is distributed in the hope that it will be useful,\n\tbut WITHOUT ANY WARRANTY; without even the implied warranty of\n\tMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n\tLesser General Public License for more details.\n\n\tYou should have received a copy of the GNU Lesser General Public\n\tLicense along with this library; if not, write to the Free Software\n\tFoundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n*/J\x02\n\n`\x01h\x01BN\x08\xab\x02*\x01#B\x1c\x08\x96\x01*\x07includeB\x07\x08\x89\x02`\x13h\tJ\x01 `\x13h\x02B\x1f\x08\xae\x01*\r&lt;queue&gt;B\x07\x08\x89\x02`\x13h\x14`\x13h\nJ\x03\n\n\n`\x13h\x01B\\\x08\x02BU\x08\x01B!\x089B\x1a\x086*\tnamespaceB\x07\x08\x89\x02`\x16h\n`\x16h\x01J\x01 B\x14\x086*\x03stdB\x07\x08\x89\x02`\x16h\x0e`\x16h\x0bB\x18\x08<*\x07{\n\n\n\n\n}B\x07\x08\x89\x02`\x1bh\x02`\x16h\x0eJ\x01\nR\x1a\n\x0fqueue/cpp/602.c\x12\x050.9.5\x18\x04'
+p4
+sb.

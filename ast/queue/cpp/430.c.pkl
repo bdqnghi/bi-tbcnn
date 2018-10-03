@@ -1,0 +1,10 @@
+cfast_pb2
+Data
+p0
+(tRp1
+(dp2
+S'serialized'
+p3
+S'\n\xb2\x0c\x08\x00B\x1d\x08\x06*\x12//Brett LindenbergJ\x01\n`\x01h\x01B\x16\x08\x06*\x0b//7836-3841J\x01\n`\x02h\x01B!\x08\x06*\x16//COP3530 Assignment 4J\x01\n`\x03h\x01B\x1c\x08\x06*\x10//Queue.cpp fileJ\x02\n\n`\x04h\x01B\x99\x0b\x08\x06*\x89\x0b/*\n#include &lt;stdio.h&gt;\n#include &lt;ostream&gt;\n#include &lt;sstream&gt;\n#include "Queue.h"\n#include &lt;cstddef&gt;\n\n\nusing namespace std;\n\n//template &lt;class T&gt;\nQueue::Queue() \n{\n\tfirst,last=NULL;\n}\n\n\n\n//template &lt;class T&gt;\nbool Queue::empty()\n{\n\treturn (first==NULL &amp;&amp; last==NULL);\n}\n\n//template &lt;class T&gt;\nint Queue::size()\n{\n\tint count=0;\n\ttempNode = first;\n\twhile (tempNode-&gt;next !=NULL)\n\t{\n\t\tcount++;\n\t\ttempNode = tempNode-&gt;next;\n\t}\n\n\treturn count;\n}\n\n//template &lt;class T&gt;\nint&amp; Queue::back() \n{\n\treturn first-&gt; data;\n}\n\n//template &lt;class T&gt;\nint&amp; Queue::front() \n{\n\treturn last-&gt;data;\n}\n\n//template &lt;class T&gt;\nint Queue::pop() \n{\t\n\tif (first!=NULL &amp;&amp; last!=NULL)\n\t{\n\ttempNode=last;\n\tlast = last-&gt;prev;\n\tlast-&gt;next=NULL;\n\t}\n\tcout&lt;&lt;"Pop "&lt;&lt;tempNode-&gt;data&lt;&lt;endl;\n\treturn tempNode-&gt;data;\n}\n\n//template &lt;class T&gt;\nvoid Queue::push(int element) \n{\n\tif(first==NULL)\n\t{\n\t\tfirst=new Node(element);\n\t\tlast=first;\n\t\tfirst-&gt;next=NULL;\n\t\tfirst-&gt;prev=NULL;\n\t} \n\n\telse\n\t{\n\t\ttempNode = first;\n\t\tfirst = new Node(element);\n\t\tfirst-&gt;next = tempNode;\n\t\ttempNode-&gt;prev = first;\n\t}\n\n}\n/*\nvoid Queue::show() \n{\t\n\tif (last!=NULL)\n\t{\t\n\ttempNode=first;\n\tcout&lt;&lt;"The queue is ";\n\twhile(tempNode !=NULL)\n\t{\tcout&lt;&lt;(tempNode-&gt;data)&lt;&lt;" ";\n\t\ttempNode=tempNode-&gt;next;\n\t}\n\t\t\n\tcout&lt;&lt;"\\n";\n\t}\n}\n*/J\x05\n\n\n\n\n`\x06h\x01R\x1a\n\x0fqueue/cpp/430.c\x12\x050.9.5\x18\x04'
+p4
+sb.

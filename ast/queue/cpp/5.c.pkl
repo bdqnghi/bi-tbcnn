@@ -1,0 +1,10 @@
+cfast_pb2
+Data
+p0
+(tRp1
+(dp2
+S'serialized'
+p3
+S'\n\x81\x0b\x08\x00B\r\x08\x06*\x02//J\x01\n`\x01h\x01B\x19\x08\x06*\x0e// Quick NotesJ\x01\n`\x02h\x01BC\x08\x06*8// 4/5 (Trey): Created Queue.cpp file and sent to othersJ\x01\n`\x03h\x01B-\x08\x06*"// for compilation/linking testingJ\x01\n`\x04h\x01B?\x08\x06*4// 4/5 (Joshua: Identified this as source of linkingJ\x01\n`\x05h\x01B@\x08\x06*5// problems and had to create workaround. See Queue.hJ\x01\n`\x06h\x01B\x1f\x08\x06*\x14// for more details.J\x01\n`\x07h\x01B\r\x08\x06*\x02//J\x01\n`\x08h\x01B\x91\x08\x08\x06*\x88\x08/*\n#include "Queue.h"\n#include &lt;cstddef&gt;\ntemplate &lt;class T&gt;\nQueue&lt;T&gt;::Queue()\n{\n\tfront = NULL;\n\trear = NULL;\n\tnumItems = 0;\n}\n\ntemplate &lt;class T&gt;\nQueue&lt;T&gt;::~Queue()\n{\n\tclear();\n}\n\ntemplate &lt;class T&gt; \nvoid Queue&lt;T&gt;::enqueue(T item)\n{\n\tQueueNode *newNode = NULL;\n\tnewNode = new QueueNode;\n\tnewNode-&gt;value = item;\n\tnewNode-&gt;next = NULL;\n\n\tif (isEmpty())\n\t{\n\t\tfront = newNode;\n\t\trear = newNode;\n\t}\n\telse\n\t{\n\t\trear-&gt;next = newNode;\n\t\trear = newNode;\n\t}\n\tnumItems++;\n}\n\ntemplate &lt;class T&gt;\nvoid Queue&lt;T&gt;::dequeue(T &amp;item)\n{\n\tQueueNode *temp = NULL;\n\tif (isEmpty())\n\t{\n\n\t}\n\telse\n\t{\n\t\titem = front-&gt;value;\n\t\ttemp = front;\n\t\tfront = front-&gt;next;\n\t\tdelete temp;\n\n\t\tnumItems--;\n\t}\n}\n\ntemplate &lt;class T&gt; \nbool Queue&lt;T&gt;::isEmpty() const\n{\n\tbool status;\n\n\tif (numItems &gt; 0)\n\t{\n\t\tstatus = false;\n\t}\n\telse\n\t{\n\t\tstatus = true;\n\t}\n\treturn status;\n}\n\ntemplate &lt;class T&gt;\nvoid Queue&lt;T&gt;::clear()\n{\n\tT value;\n\twhile (!isEmpty)\n\t{\n\t\tdequeue(value);\n\t}\n}\n\n*/`\th\x01R\x18\n\rqueue/cpp/5.c\x12\x050.9.5\x18\x04'
+p4
+sb.
