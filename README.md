@@ -23,7 +23,6 @@ sudo apt-get install docker-ce
 
 Enter the following scripts on the command line to build and run the system respectively:
 ```
-./b
 ./r clean
 ```
 

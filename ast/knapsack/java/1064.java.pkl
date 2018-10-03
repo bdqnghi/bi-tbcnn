@@ -1,0 +1,10 @@
+cfast_pb2
+Data
+p0
+(tRp1
+(dp2
+S'serialized'
+p3
+S'\n\x9e\x04\x08\x00B\x95\x03\x08\x06*\x89\x03/**\n * Classical knapsack problem. We have a knapsack that\n * can carry a certain max. amount of load weight. And \n * set of items with their weight and values.\n * Goal: maximize your amount of money that you can carry with\n * this knapsack.\n * i.e.:\n * items={(w:2,v:100),(w:4,v:200),(w:1,v:300),(w:3,v:250)}\n * capacity=7\n * knapsack(items,capacity)=600 (1,2,3. items)\n * @author t420\n *\n */J\x01\n`\x01h\x01B^\x08lB!\x08\xba\x02*\x06publicB\x07\x08\x89\x02`\x0eh\x07J\x07 class `\x0eh\x01B\x1c\x086*\x08KnapsackB\x07\x08\x89\x02`\x0eh\x16J\x01 `\x0eh\x0eB\x16\x08<*\x05{\n\t\n}B\x07\x08\x89\x02`\x10h\x02`\x0eh\x17J\x01\nR"\n\x17knapsack/java/1064.java\x12\x050.9.5\x18\x06'
+p4
+sb.

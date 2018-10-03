@@ -4,16 +4,21 @@ if [ "$1" == "clean" ]; then
 fi
 if [ ! -d code ]; then
 	mkdir -p code
+	chmod a+w code
+	crawler/run
 fi 
 if [ ! -d ast ]; then
 	mkdir -p ast
+	chmod a+w ast
 	parser/run
 fi
 if [ ! -d vec ]; then
 	mkdir -p vec
+	chmod a+w vec
 	ast2vec/run
 fi
 if [ ! -d model ]; then
 	mkdir -p model
+	chmod a+w model
 	bi-tbcnn/run
 fi
