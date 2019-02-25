@@ -1,6 +1,6 @@
-# Bilateral Tree-based Convolutional Neural Networks
+# Bilateral Neural Networks for Cross-Language Algorithm Classification
 
-The project is the implementation of our work on the Bilateral Tree-based CNN introduced in our 2 papers :
+The project is the implementation of our work on the Bilateral Neural Networks introduced in our 2 papers :
 
 - SANER'19: Bilateral Dependency Neural Networks for Cross-Language Algorithm Classification, by Nghi D. Q. BUI, Yijun YU, Lingxiao JIANG, in the 26th edition of the IEEE International Conference on Software Analysis, Evolution and Reengineering, Research Track, Zhejiang University in Hangzhou, February 24-27, 2019
 - NL4SE-AAAI'18: Cross-Language Learning for Program Classification Using Bilateral Tree-Based Convolutional Neural Networks, by Nghi D. Q. BUI, Lingxiao JIANG, and Yijun YU. In the proceedings of the 32nd AAAI Conference on Artificial Intelligence (AAAI) Workshop on NLP for Software Engineering, New Orleans, Lousiana, USA, 2018. 
